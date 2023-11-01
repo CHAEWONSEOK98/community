@@ -7,12 +7,15 @@ const app = express();
 
 const mongoose = require('mongoose');
 
+const { postRouter } = require('./routes/postRoute');
+
 const server = async () => {
   try {
     await mongoose.connect(MONGO_URI);
     console.log('MongoDB Connected');
 
     app.use(express.json());
+    app.use('/post', postRouter);
 
     app.listen(PORT, () => {
       console.log('server running');
