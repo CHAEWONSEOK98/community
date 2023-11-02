@@ -25,4 +25,14 @@ postRouter.post('/', async (req, res) => {
   }
 });
 
+postRouter.get('/', async (req, res) => {
+  try {
+    let posts = await Post.find();
+    return res.send({ posts });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ error: error.message });
+  }
+});
+
 module.exports = { postRouter };
