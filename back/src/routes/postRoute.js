@@ -35,4 +35,16 @@ postRouter.get('/', async (req, res) => {
   }
 });
 
+postRouter.get('/:postId', async (req, res) => {
+  try {
+    const { postId } = req.params;
+
+    let post = await Post.findOne({ _id: postId });
+    return res.send({ post });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ error: error.message });
+  }
+});
+
 module.exports = { postRouter };
