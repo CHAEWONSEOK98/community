@@ -6,7 +6,8 @@ import "./index.css";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
 import WritePage from "../src/pages/WritePage";
-import PostPage from "./pages/PostListPage/index.tsx";
+import PostListPage from "./pages/PostListPage/index.tsx";
+import PostPage from "./pages/PostPage/index.tsx";
 
 const router = createBrowserRouter([
   {
@@ -19,6 +20,10 @@ const router = createBrowserRouter([
   },
   {
     path: "/post-list",
+    element: <PostListPage />,
+  },
+  {
+    path: "/post-list/:postId",
     element: <PostPage />,
   },
 ]);
