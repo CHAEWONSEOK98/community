@@ -1,14 +1,24 @@
+import axios from "axios";
 import { useState } from "react";
 
 const WritePage = () => {
   const [title, setTitle] = useState<string>("");
   const [content, setContent] = useState<string>("");
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log(title, content);
-    setTitle("");
-    setContent("");
+    try {
+      await axios.post(`http://localhost:3000/post`, {
+        title,
+        content,
+      });
+    } catch (error) {
+      console.log(error);
+      throw new Error("Failed to Post");
+    } finally {
+      setTitle("");
+      setContent("");
+    }
   };
 
   const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
