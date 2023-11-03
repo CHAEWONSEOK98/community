@@ -47,4 +47,16 @@ postRouter.get('/:postId', async (req, res) => {
   }
 });
 
+postRouter.delete('/:postId', async (req, res) => {
+  try {
+    const { postId } = req.params;
+
+    await Post.findOneAndDelete({ _id: postId });
+    res.json({ message: '요청하신 게시글이 삭제되었습니다.' });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ error: error.message });
+  }
+});
+
 module.exports = { postRouter };
