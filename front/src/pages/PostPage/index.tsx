@@ -2,6 +2,8 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
+import Modal from "../../components/Modal";
+
 interface Post {
   _id: string;
   title: string;
@@ -11,6 +13,7 @@ interface Post {
 
 const PostPage = () => {
   const [post, setPost] = useState<Post>([]);
+  const [modal, setModal] = useState<boolean>(false);
   let { postId } = useParams();
 
   useEffect(() => {
@@ -22,18 +25,26 @@ const PostPage = () => {
     })();
   }, []);
 
+  const handleDelete = () => {
+    setModal(true);
+  };
+
   return (
-    <div>
-      {post &&
-        post.map((element: Post) => {
-          return (
-            <div key={element._id}>
-              <h1>{element.title}</h1>
-              <p>{element.content}</p>
-              <span>{element.createdAt}</span>
-            </div>
-          );
-        })}
+    <div className="flex h-screen items-center justify-center ">
+      {modal && <Modal setModal={setModal} />}
+      <div className="border-4 p-4">
+        {post &&
+          post.map((element: Post) => {
+            return (
+              <div key={element._id} className="max-w-5xl border-2 p-10">
+                <h1>{element.title}</h1>
+                <p>{element.content}</p>
+                <span>{element.createdAt.slice(0, 10)}</span>
+              </div>
+            );
+          })}
+        <button onClick={handleDelete}>삭제</button>
+      </div>
     </div>
   );
 };
