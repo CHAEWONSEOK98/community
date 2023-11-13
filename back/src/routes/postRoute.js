@@ -47,6 +47,23 @@ postRouter.get('/:postId', async (req, res) => {
   }
 });
 
+postRouter.put('/:postId', async (req, res) => {
+  try {
+    const { postId } = req.params;
+    const { updateTitle, updateContent } = req.body;
+
+    await Post.findOneAndUpdate(
+      { _id: postId },
+      { title: updateTitle, content: updateContent },
+      { new: true }
+    );
+    return res.json({ message: '수정완료' });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ error: error.message });
+  }
+});
+
 postRouter.delete('/:postId', async (req, res) => {
   try {
     const { postId } = req.params;
