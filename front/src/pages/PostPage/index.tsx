@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
@@ -36,14 +36,19 @@ const PostPage = () => {
         {post &&
           post.map((element: Post) => {
             return (
-              <div key={element._id} className="max-w-5xl border-2 p-10">
-                <h1>{element.title}</h1>
-                <p>{element.content}</p>
-                <span>{element.createdAt.slice(0, 10)}</span>
+              <div key={element._id}>
+                <div className="max-w-5xl border-2 p-10">
+                  <h1>{element.title}</h1>
+                  <p>{element.content}</p>
+                  <span>{element.createdAt.slice(0, 10)}</span>
+                </div>
+                <div>
+                  <button onClick={handleDelete}>삭제</button>
+                  <Link to={`/write/${element._id}`}>수정</Link>
+                </div>
               </div>
             );
           })}
-        <button onClick={handleDelete}>삭제</button>
       </div>
     </div>
   );
