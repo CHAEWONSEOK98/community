@@ -22,6 +22,16 @@ const server = async () => {
     app.use('/post', postRouter);
     app.use('/auth', authRouter);
 
+    app.use((error, req, res, next) => {
+      const statusCode = error.statusCode || 500;
+      const message = error.message || 'Server Error';
+      return res.status(statusCode).json({
+        success: false,
+        message,
+        statusCode,
+      });
+    });
+
     app.listen(PORT, () => {
       console.log('server running');
     });
