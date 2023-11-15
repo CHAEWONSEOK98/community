@@ -11,23 +11,24 @@ const Header = () => {
           <span className=" font-bold">Community</span>
         </Link>
       </div>
-      <div className="cursor-pointer">
-        <ul className="flex items-center space-x-4">
-          <li className="text-base">
-            <BiSearch />
-          </li>
-          <li className="text-base">
-            <BsMoonFill />
-          </li>
-          <li className="flex text-base">
-            <BiUser />
-            <IoIosArrowDown />
-          </li>
-          <li className="text-base">
+
+      <ul className="flex cursor-pointer items-center space-x-4">
+        <li className="text-base">
+          <BiSearch />
+        </li>
+        <li className="text-base">
+          <BsMoonFill />
+        </li>
+        <li className="flex text-base">
+          <BiUser />
+          <IoIosArrowDown />
+        </li>
+        <li className="text-base">
+          <Link to={`/login`}>
             <span>로그인</span>
-          </li>
-        </ul>
-      </div>
+          </Link>
+        </li>
+      </ul>
     </header>
   );
 };

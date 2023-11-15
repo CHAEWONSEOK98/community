@@ -1,15 +1,48 @@
-import { Link } from "react-router-dom";
-import Header from "./components/Header";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
+
+import Home from "./pages/HomePage/index.tsx";
+import LoginPage from "./pages/LoginPage/index.tsx";
+import WritePage from "../src/pages/WritePage";
+import PostListPage from "./pages/PostListPage/index.tsx";
+import PostPage from "./pages/PostPage/index.tsx";
+import Root from "./pages/Root/index.tsx";
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Root />,
+    children: [
+      {
+        index: true,
+        element: <Home />,
+      },
+      {
+        path: "/login",
+        element: <LoginPage />,
+      },
+      {
+        path: "/post-list",
+        element: <PostListPage />,
+      },
+      {
+        path: "/post-list/:postId",
+        element: <PostPage />,
+      },
+    ],
+  },
+
+  {
+    path: "/write",
+    element: <WritePage />,
+  },
+  {
+    path: "/write/:postId",
+    element: <WritePage />,
+  },
+]);
 
 function App() {
-  return (
-    <div>
-      <Header />
-      <button>
-        <Link to={`/write`}>쓰기</Link>
-      </button>
-    </div>
-  );
+  return <RouterProvider router={router} />;
 }
 
 export default App;
