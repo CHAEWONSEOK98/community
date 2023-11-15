@@ -6,6 +6,7 @@ import WritePage from "../src/pages/WritePage";
 import PostListPage from "./pages/PostListPage/index.tsx";
 import PostPage from "./pages/PostPage/index.tsx";
 import Root from "./pages/Root/index.tsx";
+import SignUpPage from "./pages/SignUpPage/index.tsx";
 
 const router = createBrowserRouter([
   {
@@ -27,6 +28,10 @@ const router = createBrowserRouter([
       {
         path: "/post-list/:postId",
         element: <PostPage />,
+      },
+      {
+        path: "/sign-up",
+        element: <SignUpPage />,
       },
     ],
   },

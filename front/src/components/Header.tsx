@@ -23,11 +23,10 @@ const Header = () => {
           <BiUser />
           <IoIosArrowDown />
         </li>
-        <li className="text-base">
-          <Link to={`/login`}>
-            <span>로그인</span>
-          </Link>
-        </li>
+
+        <Link to={`/login`}>
+          <li className="text-base">로그인</li>
+        </Link>
       </ul>
     </header>
   );
