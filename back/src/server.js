@@ -9,6 +9,7 @@ const app = express();
 const mongoose = require('mongoose');
 
 const { postRouter } = require('./routes/postRoute');
+const { authRouter } = require('./routes/authRoute');
 
 const server = async () => {
   try {
@@ -19,6 +20,7 @@ const server = async () => {
     app.use(cors({ origin: 'http://localhost:5173' }));
 
     app.use('/post', postRouter);
+    app.use('/auth', authRouter);
 
     app.listen(PORT, () => {
       console.log('server running');
