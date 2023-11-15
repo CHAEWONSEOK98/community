@@ -2,6 +2,14 @@ import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
 
+import {
+  signInStart,
+  signInSuccess,
+  signInFailure,
+} from "../../store/user/userSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../store";
+
 interface FormData {
   email: string;
   password: string;
@@ -12,9 +20,12 @@ const SignInPage = () => {
     email: "",
     password: "",
   });
-  const [error, setError] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(false);
+  // const [error, setError] = useState<boolean>(false);
+  // const [loading, setLoading] = useState<boolean>(false);
+  const { loading, error } = useSelector((state: RootState) => state.user);
+  console.log(error);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [event.target.id]: event.target.value });
@@ -24,18 +35,20 @@ const SignInPage = () => {
     event.preventDefault();
 
     try {
-      setLoading(true);
-      setError(false);
-      await axios.post(`http://localhost:3000/auth/signin`, formData);
-      setLoading(false);
+      dispatch(signInStart());
+      const data = await axios.post(
+        `http://localhost:3000/auth/signin`,
+        formData,
+      );
+
       setFormData({
         email: "",
         password: "",
       });
+      dispatch(signInSuccess(data));
       navigate("/");
     } catch (error) {
-      setLoading(false);
-      setError(true);
+      dispatch(signInFailure(error));
     }
   };
 
@@ -72,7 +85,9 @@ const SignInPage = () => {
           <span className="text-purple-300">회원가입</span>
         </Link>
       </div>
-      <p className="text-red-500">{error && "error"}</p>
+      <p className="text-red-500">
+        {error ? error.response.data.message || "Error?" : ""}
+      </p>
     </div>
   );
 };
