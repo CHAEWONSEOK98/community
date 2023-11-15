@@ -3,14 +3,12 @@ import { useState } from "react";
 import axios from "axios";
 
 interface FormData {
-  username: string;
   email: string;
   password: string;
 }
 
-const SignUpPage = () => {
+const SignInPage = () => {
   const [formData, setFormData] = useState<FormData>({
-    username: "",
     email: "",
     password: "",
   });
@@ -28,14 +26,13 @@ const SignUpPage = () => {
     try {
       setLoading(true);
       setError(false);
-      await axios.post(`http://localhost:3000/auth/signup`, formData);
+      await axios.post(`http://localhost:3000/auth/signin`, formData);
       setLoading(false);
       setFormData({
-        username: "",
         email: "",
         password: "",
       });
-      navigate("/sign-in");
+      navigate("/");
     } catch (error) {
       setLoading(false);
       setError(true);
@@ -44,16 +41,8 @@ const SignUpPage = () => {
 
   return (
     <div className="mx-auto max-w-lg p-3">
-      <h1 className="my-7 text-center text-3xl font-semibold">회원가입</h1>
+      <h1 className="my-7 text-center text-3xl font-semibold">로그인</h1>
       <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
-        <input
-          type="text"
-          value={formData.username}
-          placeholder="이름"
-          id="username"
-          className="rounded-lg bg-slate-100 p-3"
-          onChange={handleChange}
-        />
         <input
           type="email"
           value={formData.email}
@@ -74,13 +63,13 @@ const SignUpPage = () => {
           disabled={loading}
           className="rounded-lg bg-slate-700 p-3 uppercase text-white hover:opacity-95 disabled:opacity-80"
         >
-          {loading ? "loading..." : "회원가입"}
+          {loading ? "loading..." : "로그인"}
         </button>
       </form>
       <div className="mt-5 flex gap-2">
-        <p>계정이 이미 있으신가요?</p>
-        <Link to={`/sign-in`}>
-          <span className="text-purple-300">로그인</span>
+        <p>아직 회원이 아니신가요?</p>
+        <Link to={`/sign-up`}>
+          <span className="text-purple-300">회원가입</span>
         </Link>
       </div>
       <p className="text-red-500">{error && "error"}</p>
@@ -88,4 +77,4 @@ const SignUpPage = () => {
   );
 };
 
-export default SignUpPage;
+export default SignInPage;

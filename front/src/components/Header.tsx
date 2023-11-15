@@ -24,7 +24,7 @@ const Header = () => {
           <IoIosArrowDown />
         </li>
 
-        <Link to={`/login`}>
+        <Link to={`/sign-in`}>
           <li className="text-base">로그인</li>
         </Link>
       </ul>

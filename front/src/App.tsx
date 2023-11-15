@@ -1,12 +1,12 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
 import Home from "./pages/HomePage/index.tsx";
-import LoginPage from "./pages/LoginPage/index.tsx";
+import SignUpPage from "./pages/SignUpPage/index.tsx";
+import SignInPage from "./pages/SignInPage/index.tsx";
 import WritePage from "../src/pages/WritePage";
 import PostListPage from "./pages/PostListPage/index.tsx";
 import PostPage from "./pages/PostPage/index.tsx";
 import Root from "./pages/Root/index.tsx";
-import SignUpPage from "./pages/SignUpPage/index.tsx";
 
 const router = createBrowserRouter([
   {
@@ -18,8 +18,12 @@ const router = createBrowserRouter([
         element: <Home />,
       },
       {
-        path: "/login",
-        element: <LoginPage />,
+        path: "/sign-up",
+        element: <SignUpPage />,
+      },
+      {
+        path: "/sign-in",
+        element: <SignInPage />,
       },
       {
         path: "/post-list",
@@ -28,10 +32,6 @@ const router = createBrowserRouter([
       {
         path: "/post-list/:postId",
         element: <PostPage />,
-      },
-      {
-        path: "/sign-up",
-        element: <SignUpPage />,
       },
     ],
   },
