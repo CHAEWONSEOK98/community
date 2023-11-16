@@ -1,6 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
+import OAuth from "../../components/OAuth";
 
 interface FormData {
   username: string;
@@ -48,6 +49,7 @@ const SignUpPage = () => {
       <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
         <input
           type="text"
+          required
           value={formData.username}
           placeholder="이름"
           id="username"
@@ -56,6 +58,7 @@ const SignUpPage = () => {
         />
         <input
           type="email"
+          required
           value={formData.email}
           placeholder="이메일"
           id="email"
@@ -64,6 +67,7 @@ const SignUpPage = () => {
         />
         <input
           type="password"
+          required
           value={formData.password}
           placeholder="비밀번호"
           id="password"
@@ -76,6 +80,7 @@ const SignUpPage = () => {
         >
           {loading ? "loading..." : "회원가입"}
         </button>
+        <OAuth />
       </form>
       <div className="mt-5 flex gap-2">
         <p>계정이 이미 있으신가요?</p>

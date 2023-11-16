@@ -9,6 +9,7 @@ import {
 } from "../../store/user/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
+import OAuth from "../../components/OAuth";
 
 interface FormData {
   email: string;
@@ -23,7 +24,7 @@ const SignInPage = () => {
   // const [error, setError] = useState<boolean>(false);
   // const [loading, setLoading] = useState<boolean>(false);
   const { loading, error } = useSelector((state: RootState) => state.user);
-  console.log(error);
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -58,6 +59,7 @@ const SignInPage = () => {
       <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
         <input
           type="email"
+          required
           value={formData.email}
           placeholder="이메일"
           id="email"
@@ -66,6 +68,7 @@ const SignInPage = () => {
         />
         <input
           type="password"
+          required
           value={formData.password}
           placeholder="비밀번호"
           id="password"
@@ -78,6 +81,7 @@ const SignInPage = () => {
         >
           {loading ? "loading..." : "로그인"}
         </button>
+        <OAuth />
       </form>
       <div className="mt-5 flex gap-2">
         <p>아직 회원이 아니신가요?</p>
@@ -86,7 +90,7 @@ const SignInPage = () => {
         </Link>
       </div>
       <p className="text-red-500">
-        {error ? error.response.data.message || "Error?" : ""}
+        {error ? (error.response && error.response.data.message) || "" : ""}
       </p>
     </div>
   );
