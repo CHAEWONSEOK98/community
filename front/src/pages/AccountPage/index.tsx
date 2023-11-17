@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 const AccountPage = () => {
   const { currentUser } = useSelector((state: RootState) => state.user);
   return (
-    <div className="fixed left-0 top-0 z-10 mx-auto h-full w-full max-w-[956px] bg-[#FFFFFF] p-3 lg:static">
+    <div className="fixed left-0 top-0 z-10 mx-auto h-full w-full bg-[#FFFFFF] p-4 lg:static lg:max-w-[956px]">
       <header>
         <Header text="계정 정보" />
       </header>

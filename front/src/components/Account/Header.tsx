@@ -14,7 +14,7 @@ const Header = ({ text }: string) => {
         onClick={handleClick}
       />
 
-      <span className="font-bold">{text}</span>
+      <span className="text-sm font-bold lg:mx-0 lg:text-xl">{text}</span>
     </header>
   );
 };
