@@ -10,7 +10,7 @@ const Header = () => {
   const { currentUser } = useSelector((state: RootState) => state.user);
 
   return (
-    <header className="m-auto flex h-24 max-w-7xl items-center justify-between">
+    <header className="-z-10 m-auto flex h-24 max-w-7xl items-center justify-between">
       <div>
         <Link to={`/`}>
           <span className=" font-bold">Community</span>

@@ -1,22 +1,16 @@
-import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
+import { IoIosArrowForward } from "react-icons/io";
 import { MdOutlineLibraryBooks } from "react-icons/md";
 import { AiOutlineComment } from "react-icons/ai";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
-import { Link } from "react-router-dom";
+import Header from "../../components/Account/Header";
 
 const SeeMorePage = () => {
   const { currentUser } = useSelector((state: RootState) => state.user);
 
   return (
     <div className="mx-auto h-screen max-w-3xl  p-4">
-      <header className="flex items-center gap-2">
-        <Link to={`/`}>
-          <IoIosArrowBack className="cursor-pointer text-2xl" />
-        </Link>
-
-        <span className="font-bold">더보기</span>
-      </header>
+      <Header text="더보기" />
 
       <main className="my-12 flex cursor-pointer items-center justify-between">
         <div className="flex items-center space-x-5">
