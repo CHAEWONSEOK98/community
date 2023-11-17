@@ -1,13 +1,14 @@
 import { BiSearch, BiUser } from "react-icons/bi";
 import { BsMoonFill } from "react-icons/bs";
 import { IoIosArrowDown } from "react-icons/io";
+import { RxHamburgerMenu } from "react-icons/rx";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
 
 const Header = () => {
   const { currentUser } = useSelector((state: RootState) => state.user);
-  console.log(currentUser);
+
   return (
     <header className="m-auto flex h-24 max-w-7xl items-center justify-between">
       <div>
@@ -25,8 +26,8 @@ const Header = () => {
         </li>
 
         {currentUser ? (
-          <Link to={`/profile`}>
-            <li className="flex items-center gap-1 text-base">
+          <ul>
+            <li className="hidden items-center gap-1 text-base md:flex">
               <img
                 src={currentUser.data.profilePicture}
                 alt="profile"
@@ -34,7 +35,12 @@ const Header = () => {
               />
               <IoIosArrowDown />
             </li>
-          </Link>
+            <li className="md:hidden">
+              <Link to={`/see-more`}>
+                <RxHamburgerMenu />
+              </Link>
+            </li>
+          </ul>
         ) : (
           <Link to={`/sign-in`}>
             <li className="text-base">로그인</li>
