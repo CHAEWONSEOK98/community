@@ -12,13 +12,15 @@ const AccountPage = () => {
         <Header text="계정 정보" />
       </header>
 
-      <div className="my-12 flex justify-center">
-        <img
-          src={`${currentUser?.data.profilePicture}`}
-          alt="profile-image"
-          className="rounded-full"
-        />
-      </div>
+      <Link to={`/account/profile`}>
+        <div className="my-12 flex justify-center">
+          <img
+            src={`${currentUser?.data.profilePicture}`}
+            alt="profile-image"
+            className="rounded-full"
+          />
+        </div>
+      </Link>
 
       <nav>
         <ul className="flex flex-col ">
