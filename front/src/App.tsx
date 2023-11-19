@@ -9,6 +9,7 @@ import SignInPage from "./pages/SignInPage/index.tsx";
 import PrivateRoute from "./components/PrivateRoute.tsx";
 import AccountPage from "./pages/AccountPage/index.tsx";
 import AccountProfilePage from "./pages/AccountPage/AccountProfilePage.tsx";
+import AccountUnRegisterPage from "./pages/AccountPage/AccountUnRegisterPage.tsx";
 
 import PostListPage from "./pages/PostListPage/index.tsx";
 import PostPage from "./pages/PostPage/index.tsx";
@@ -43,6 +44,10 @@ const router = createBrowserRouter([
           {
             path: "/account/profile",
             element: <AccountProfilePage />,
+          },
+          {
+            path: "/account/unregister",
+            element: <AccountUnRegisterPage />,
           },
         ],
       },
