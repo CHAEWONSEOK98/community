@@ -17,7 +17,7 @@ const AccountPage = () => {
           <img
             src={`${currentUser?.data.profilePicture}`}
             alt="profile-image"
-            className="rounded-full"
+            className="h-24 w-24 rounded-full"
           />
         </div>
       </Link>
