@@ -4,12 +4,14 @@ const MONGO_URI = process.env.MONGO_URI;
 
 const express = require('express');
 const cors = require('cors');
+const cookieParser = require('cookie-parser');
 const app = express();
 
 const mongoose = require('mongoose');
 
 const { postRouter } = require('./routes/postRoute');
 const { authRouter } = require('./routes/authRoute');
+const { userRouter } = require('./routes/userRoute');
 
 const server = async () => {
   try {
@@ -17,10 +19,12 @@ const server = async () => {
     console.log('MongoDB Connected');
 
     app.use(express.json());
+    app.use(cookieParser());
     app.use(cors({ origin: 'http://localhost:5173' }));
 
     app.use('/post', postRouter);
     app.use('/auth', authRouter);
+    app.use('/user', userRouter);
 
     app.use((error, req, res, next) => {
       const statusCode = error.statusCode || 500;
