@@ -1,6 +1,11 @@
 import { HiPlusCircle } from "react-icons/hi";
 import { MdCancel } from "react-icons/md";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  updateUserStart,
+  updateUserSuccess,
+  updateUserFailure,
+} from "../../store/user/userSlice";
 import Header from "../../components/Account/Header";
 import { RootState } from "../../store";
 import { useState, useRef, useEffect } from "react";
@@ -11,10 +16,14 @@ import {
   uploadBytesResumable,
 } from "firebase/storage";
 import { app } from "../../firebase";
+import axios from "axios";
 
 const AccountProfilePage = () => {
-  const { currentUser } = useSelector((state: RootState) => state.user);
-  const [name, setName] = useState<string | undefined>(
+  const dispatch = useDispatch();
+  const { currentUser, loading, error } = useSelector(
+    (state: RootState) => state.user,
+  );
+  const [username, setUsername] = useState<string | undefined>(
     currentUser.data.username,
   );
   const filePickerRef = useRef(null);
@@ -22,13 +31,13 @@ const AccountProfilePage = () => {
   const [imagePercent, setImagePercent] = useState(0);
   const [imageError, setImageError] = useState<boolean>(false);
   const [formData, setFormData] = useState({});
-  console.log(formData);
-
-  useEffect(() => {
-    if (imageFile) {
-      handleFileUpload(imageFile);
-    }
-  }, [imageFile]);
+  const [updateSuccess, setUpdateSuccess] = useState<boolean>(false);
+  console.log(formData),
+    useEffect(() => {
+      if (imageFile) {
+        handleFileUpload(imageFile);
+      }
+    }, [imageFile]);
 
   const handleFileUpload = async (imageFile) => {
     const storage = getStorage(app);
@@ -54,17 +63,15 @@ const AccountProfilePage = () => {
     );
   };
 
-  const handleCancelClick = () => {
-    setName("");
-  };
-
   const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.value.length > 16) return;
-    setName(event.target.value);
+    setUsername(event.target.value);
+    setFormData({ ...formData, username: event.currentTarget.value });
+    console.log(formData);
   };
 
-  const handleSubmit = (evnet: React.FormEvent<HTMLFormElement>) => {
-    evnet.preventDefault();
+  const handleCancelClick = () => {
+    setUsername("");
   };
 
   const handleFileOpen = () => {
@@ -75,6 +82,23 @@ const AccountProfilePage = () => {
     setImageFile(event.currentTarget.files[0]);
   };
 
+  const handleSubmit = async (evnet: React.FormEvent<HTMLFormElement>) => {
+    evnet.preventDefault();
+    try {
+      dispatch(updateUserStart());
+      const data = await axios.post(
+        `http://localhost:3000/user/update/${currentUser?.data._id}`,
+        formData,
+        { withCredentials: true },
+      );
+      console.log(data);
+
+      dispatch(updateUserSuccess(data));
+      setUpdateSuccess(true);
+    } catch (error) {
+      dispatch(updateUserFailure(error));
+    }
+  };
   return (
     <div className="fixed left-0 top-0 z-10 mx-auto h-full w-full bg-[#FFFFFF] p-4 lg:static lg:max-w-[956px]">
       <Header text="프로필 수정" />
@@ -115,7 +139,7 @@ const AccountProfilePage = () => {
         <div className="flex items-center justify-between text-xs">
           <span className=" font-semibold">닉네임을 입력해주세요.</span>
           <span>
-            {`${name.length}`}
+            {`${username.length}`}
             <span className="text-gray-400">/16</span>
           </span>
         </div>
@@ -123,7 +147,7 @@ const AccountProfilePage = () => {
         <div className="relative">
           <input
             type="text"
-            value={name}
+            value={username}
             className=" w-full rounded-[3px] border-[1px] border-solid p-3  outline-none"
             onChange={handleNameChange}
             autoFocus
@@ -137,12 +161,19 @@ const AccountProfilePage = () => {
         </div>
 
         <button
-          disabled={currentUser.data.username === name ? true : false}
+          disabled={
+            currentUser.data.username === username &&
+            formData.profilePicture === undefined
+              ? true
+              : false
+          }
           className="cursor-pointer rounded-[2px] bg-[#6111EC] py-4 text-white  opacity-40 disabled:cursor-default disabled:bg-slate-500"
         >
           저장
         </button>
       </form>
+      <p className="mt-4 text-red-600">{error && "업데이트 실패"}</p>
+      <p className="mt-4 text-green-600">{updateSuccess && "업데이트 성공"}</p>
     </div>
   );
 };

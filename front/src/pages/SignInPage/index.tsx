@@ -40,6 +40,7 @@ const SignInPage = () => {
       const data = await axios.post(
         `http://localhost:3000/auth/signin`,
         formData,
+        { withCredentials: true },
       );
 
       setFormData({
