@@ -9,7 +9,7 @@ interface FormData {
   password: string;
 }
 
-const SignUpPage = () => {
+const RegisterPage = () => {
   const [formData, setFormData] = useState<FormData>({
     username: "",
     email: "",
@@ -29,14 +29,14 @@ const SignUpPage = () => {
     try {
       setLoading(true);
       setError(false);
-      await axios.post(`http://localhost:3000/auth/signup`, formData);
+      await axios.post(`http://localhost:3000/auth/register`, formData);
       setLoading(false);
       setFormData({
         username: "",
         email: "",
         password: "",
       });
-      navigate("/sign-in");
+      navigate("/login");
     } catch (error) {
       setLoading(false);
       setError(true);
@@ -84,7 +84,7 @@ const SignUpPage = () => {
       </form>
       <div className="mt-5 flex gap-2">
         <p>계정이 이미 있으신가요?</p>
-        <Link to={`/sign-in`}>
+        <Link to={`/login`}>
           <span className="text-purple-300">로그인</span>
         </Link>
       </div>
@@ -93,4 +93,4 @@ const SignUpPage = () => {
   );
 };
 
-export default SignUpPage;
+export default RegisterPage;

@@ -3,9 +3,9 @@ import { useState } from "react";
 import axios from "axios";
 
 import {
-  signInStart,
-  signInSuccess,
-  signInFailure,
+  logInStart,
+  logInSuccess,
+  logInFailure,
 } from "../../store/user/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
@@ -16,7 +16,7 @@ interface FormData {
   password: string;
 }
 
-const SignInPage = () => {
+const LogInPage = () => {
   const [formData, setFormData] = useState<FormData>({
     email: "",
     password: "",
@@ -36,9 +36,9 @@ const SignInPage = () => {
     event.preventDefault();
 
     try {
-      dispatch(signInStart());
+      dispatch(logInStart());
       const data = await axios.post(
-        `http://localhost:3000/auth/signin`,
+        `http://localhost:3000/auth/login`,
         formData,
         { withCredentials: true },
       );
@@ -47,10 +47,10 @@ const SignInPage = () => {
         email: "",
         password: "",
       });
-      dispatch(signInSuccess(data));
+      dispatch(logInSuccess(data));
       navigate("/");
     } catch (error) {
-      dispatch(signInFailure(error));
+      dispatch(logInFailure(error));
     }
   };
 
@@ -86,7 +86,7 @@ const SignInPage = () => {
       </form>
       <div className="mt-5 flex gap-2">
         <p>아직 회원이 아니신가요?</p>
-        <Link to={`/sign-up`}>
+        <Link to={`/register`}>
           <span className="text-purple-300">회원가입</span>
         </Link>
       </div>
@@ -97,4 +97,4 @@ const SignInPage = () => {
   );
 };
 
-export default SignInPage;
+export default LogInPage;

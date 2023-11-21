@@ -104,7 +104,7 @@ const Header = () => {
             )}
           </ul>
         ) : (
-          <Link to={`/sign-in`}>
+          <Link to={`/login`}>
             <li className="text-base">로그인</li>
           </Link>
         )}

@@ -3,8 +3,8 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Root from "./pages/Root/index.tsx";
 import Home from "./pages/HomePage/index.tsx";
 
-import SignUpPage from "./pages/SignUpPage/index.tsx";
-import SignInPage from "./pages/SignInPage/index.tsx";
+import RegisterPage from "./pages/RegisterPage/index.tsx";
+import LogInPage from "./pages/LogInPage/index.tsx";
 
 import PrivateRoute from "./components/PrivateRoute.tsx";
 import AccountPage from "./pages/AccountPage/index.tsx";
@@ -27,12 +27,12 @@ const router = createBrowserRouter([
         element: <Home />,
       },
       {
-        path: "/sign-up",
-        element: <SignUpPage />,
+        path: "/register",
+        element: <RegisterPage />,
       },
       {
-        path: "/sign-in",
-        element: <SignInPage />,
+        path: "/login",
+        element: <LogInPage />,
       },
       {
         element: <PrivateRoute />,

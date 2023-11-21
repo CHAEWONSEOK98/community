@@ -2,7 +2,7 @@ import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
 import { app } from "../firebase";
 import axios from "axios";
 import { useDispatch } from "react-redux";
-import { signInSuccess } from "../store/user/userSlice";
+import { logInSuccess } from "../store/user/userSlice";
 import { useNavigate } from "react-router-dom";
 
 const OAuth = () => {
@@ -24,7 +24,7 @@ const OAuth = () => {
         { withCredentials: true },
       );
       console.log(data);
-      dispatch(signInSuccess(data));
+      dispatch(logInSuccess(data));
       navigate("/");
     } catch (error) {
       console.log("구글 로그인 실패", error);

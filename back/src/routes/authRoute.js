@@ -5,7 +5,7 @@ const bcryptjs = require('bcryptjs');
 const { errorHanlder } = require('../utils/error');
 const jwt = require('jsonwebtoken');
 
-authRouter.post('/signup', async (req, res, next) => {
+authRouter.post('/register', async (req, res, next) => {
   try {
     const { username, email, password } = req.body;
     const hashedPassword = bcryptjs.hashSync(password, 10);
@@ -19,7 +19,7 @@ authRouter.post('/signup', async (req, res, next) => {
   }
 });
 
-authRouter.post('/signin', async (req, res, next) => {
+authRouter.post('/login', async (req, res, next) => {
   const { email, password } = req.body;
   try {
     const validUser = await User.findOne({ email });
