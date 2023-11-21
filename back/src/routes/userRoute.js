@@ -35,4 +35,19 @@ userRouter.post('/update/:userId', verifyToken, async (req, res, next) => {
   }
 });
 
+userRouter.delete('/delete/:userId', verifyToken, async (req, res, next) => {
+  if (req.user.id !== req.params.userId) {
+    return next(errorHanlder(401, '본인 계정만 삭제 가능합니다.'));
+  }
+
+  try {
+    await User.findOneAndDelete({
+      _id: req.params.userId,
+    });
+    res.status(200).json('삭제되었습니다.');
+  } catch (error) {
+    next(error);
+  }
+});
+
 module.exports = { userRouter };
