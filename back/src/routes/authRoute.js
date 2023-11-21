@@ -80,4 +80,8 @@ authRouter.post('/google', async (req, res, next) => {
   }
 });
 
+authRouter.get('/logout', (req, res) => {
+  res.clearCookie('access_token').status(200).json('로그아웃 성공');
+});
+
 module.exports = { authRouter };
