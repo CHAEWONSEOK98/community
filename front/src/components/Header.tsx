@@ -6,16 +6,30 @@ import { RxHamburgerMenu } from "react-icons/rx";
 import { MdOutlineLibraryBooks } from "react-icons/md";
 import { AiOutlineComment } from "react-icons/ai";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../store";
+import { logOut } from "../store/user/userSlice";
 import { useState } from "react";
+import axios from "axios";
 
 const Header = () => {
   const { currentUser } = useSelector((state: RootState) => state.user);
   const [seeMoreToggle, setSeeMoreToggle] = useState<boolean>(false);
+  const dispatch = useDispatch();
 
   const handleToggleClick = () => {
     setSeeMoreToggle((prev) => !prev);
+  };
+
+  const handleLogOut = async () => {
+    try {
+      await axios.get("http://localhost:3000/auth/logout", {
+        withCredentials: true,
+      });
+      dispatch(logOut());
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -78,7 +92,10 @@ const Header = () => {
                   </ul>
 
                   <footer className="my-4 w-full">
-                    <button className="w-full border-t  border-gray-300 pt-4 text-xs text-[#7A7A7A]">
+                    <button
+                      onClick={handleLogOut}
+                      className="w-full border-t  border-gray-300 pt-4 text-xs text-[#7A7A7A]"
+                    >
                       로그아웃
                     </button>
                   </footer>

@@ -1,11 +1,25 @@
 import { IoIosArrowForward } from "react-icons/io";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
 import Header from "../../components/Account/Header";
 import { Link } from "react-router-dom";
+import { logOut } from "../../store/user/userSlice";
+import axios from "axios";
 
 const AccountPage = () => {
   const { currentUser } = useSelector((state: RootState) => state.user);
+  const dispatch = useDispatch();
+
+  const handleLogOut = async () => {
+    try {
+      await axios.get("http://localhost:3000/auth/logout", {
+        withCredentials: true,
+      });
+      dispatch(logOut());
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <div className="fixed left-0 top-0 z-10 mx-auto h-full w-full bg-[#FFFFFF] p-4 lg:static lg:max-w-[956px]">
       <header>
@@ -43,7 +57,10 @@ const AccountPage = () => {
               </span>
             </div>
           </li>
-          <li className="flex cursor-pointer items-center justify-between border-b-[1px] border-black border-opacity-50 py-6 lg:hidden">
+          <li
+            className="flex cursor-pointer items-center justify-between border-b-[1px] border-black border-opacity-50 py-6 lg:hidden"
+            onClick={handleLogOut}
+          >
             <span className="text-sm font-semibold">로그아웃</span>
             <IoIosArrowForward />
           </li>
