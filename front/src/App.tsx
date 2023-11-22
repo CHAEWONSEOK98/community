@@ -15,7 +15,6 @@ import PostListPage from "./pages/PostListPage/index.tsx";
 import PostPage from "./pages/PostPage/index.tsx";
 
 import WritePage from "../src/pages/WritePage";
-import SeeMorePage from "./pages/SeeMorePage/index.tsx";
 
 const router = createBrowserRouter([
   {
@@ -69,10 +68,6 @@ const router = createBrowserRouter([
   {
     path: "/write/:postId",
     element: <WritePage />,
-  },
-  {
-    path: "/see-more",
-    element: <SeeMorePage />,
   },
 ]);
 
