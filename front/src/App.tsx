@@ -15,6 +15,7 @@ import PostListPage from "./pages/PostListPage/index.tsx";
 import PostPage from "./pages/PostPage/index.tsx";
 
 import WritePage from "../src/pages/WritePage";
+import MyPostListPage from "./pages/MyPage/MyPostListPage.tsx";
 
 const router = createBrowserRouter([
   {
@@ -47,6 +48,11 @@ const router = createBrowserRouter([
           {
             path: "/account/unregister",
             element: <AccountUnRegisterPage />,
+          },
+
+          {
+            path: "/my/post-list",
+            element: <MyPostListPage />,
           },
         ],
       },

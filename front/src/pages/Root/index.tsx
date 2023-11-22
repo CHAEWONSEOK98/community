@@ -3,7 +3,7 @@ import Header from "../../components/Header";
 
 const Root = () => {
   return (
-    <div>
+    <div className="mx-auto max-w-7xl">
       <Header />
       <Outlet />
     </div>

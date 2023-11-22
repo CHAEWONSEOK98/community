@@ -33,7 +33,7 @@ const Header = () => {
   };
 
   return (
-    <header className="-z-10 m-auto flex h-24 max-w-7xl items-center justify-between px-4">
+    <header className="flex h-24 items-center justify-between px-4">
       <div>
         <Link to={`/`}>
           <span className=" font-bold">Community</span>
@@ -52,7 +52,7 @@ const Header = () => {
           <ul className="flex items-center gap-3">
             <Link
               to={`/write`}
-              className="hidden rounded-md border border-black p-2 font-bold md:flex"
+              className="hidden rounded-md border border-black p-1 font-bold md:flex"
             >
               게시글 작성
             </Link>
@@ -89,10 +89,13 @@ const Header = () => {
                       <BsClipboard className="text-xl" />
                       <span className="text-sm">게시글 작성</span>
                     </Link>
-                    <li className="flex items-center gap-2">
+                    <Link
+                      to={`/my/post-list`}
+                      className="flex items-center gap-2"
+                    >
                       <MdOutlineLibraryBooks className="text-xl" />
                       <span className="text-sm">게시글 내역</span>
-                    </li>
+                    </Link>
                     <li className="flex items-center gap-2">
                       <AiOutlineComment className="text-xl" />
                       <span className="text-sm">댓글 내역</span>
