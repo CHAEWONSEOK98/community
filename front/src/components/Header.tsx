@@ -2,7 +2,7 @@ import { IoIosArrowForward } from "react-icons/io";
 import { BiSearch } from "react-icons/bi";
 import { BsMoonFill } from "react-icons/bs";
 import { IoIosArrowDown } from "react-icons/io";
-import { RxHamburgerMenu } from "react-icons/rx";
+import { BsClipboard } from "react-icons/bs";
 import { MdOutlineLibraryBooks } from "react-icons/md";
 import { AiOutlineComment } from "react-icons/ai";
 import { Link } from "react-router-dom";
@@ -33,14 +33,14 @@ const Header = () => {
   };
 
   return (
-    <header className="-z-10 m-auto flex h-24 max-w-7xl items-center justify-between">
+    <header className="-z-10 m-auto flex h-24 max-w-7xl items-center justify-between px-4">
       <div>
         <Link to={`/`}>
           <span className=" font-bold">Community</span>
         </Link>
       </div>
 
-      <ul className="relative flex cursor-pointer items-center space-x-4">
+      <ul className="relative flex cursor-pointer items-center gap-3">
         <li className="text-base">
           <BiSearch />
         </li>
@@ -49,10 +49,16 @@ const Header = () => {
         </li>
 
         {currentUser ? (
-          <ul>
+          <ul className="flex items-center gap-3">
+            <Link
+              to={`/write`}
+              className="hidden rounded-md border border-black p-2 font-bold md:flex"
+            >
+              게시글 작성
+            </Link>
             <li
               onClick={handleToggleClick}
-              className=" hidden items-center gap-1 text-base md:flex"
+              className="flex items-center gap-1 text-base"
             >
               <img
                 src={currentUser.data.profilePicture}
@@ -61,14 +67,9 @@ const Header = () => {
               />
               <IoIosArrowDown />
             </li>
-            <li className="md:hidden">
-              <Link to={`/see-more`}>
-                <RxHamburgerMenu />
-              </Link>
-            </li>
 
             {seeMoreToggle && (
-              <nav className="absolute -left-36 top-10  hidden w-72 rounded-[8px]  border px-4 pt-4 shadow-lg md:block">
+              <nav className="absolute right-1 top-10 w-48 rounded-[8px] border bg-white px-4 pt-4 shadow-lg md:w-72">
                 <div
                   className="flex flex-col items-center"
                   onClick={handleToggleClick}
@@ -81,6 +82,13 @@ const Header = () => {
                   </Link>
 
                   <ul className="mt-4 flex flex-col gap-4">
+                    <Link
+                      to={`/write`}
+                      className="flex items-center gap-2 md:hidden"
+                    >
+                      <BsClipboard className="text-xl" />
+                      <span className="text-sm">게시글 작성</span>
+                    </Link>
                     <li className="flex items-center gap-2">
                       <MdOutlineLibraryBooks className="text-xl" />
                       <span className="text-sm">게시글 내역</span>
