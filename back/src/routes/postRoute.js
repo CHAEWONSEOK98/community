@@ -1,24 +1,32 @@
 const { Router } = require('express');
 const postRouter = Router();
+
 const { Post } = require('../models/Post');
+const { User } = require('../models/User');
+const { errorHanlder } = require('../utils/error');
+const { isValidObjectId } = require('mongoose');
 
 postRouter.post('/', async (req, res) => {
   try {
-    const { title, content } = req.body;
+    const { title, content, userId } = req.body;
 
-    if (!title || !content) {
-      return res.status(400).send({ error: 'title and content are required' });
-    }
     if (typeof title !== 'string') {
-      return res.status(400).send({ error: 'title must be a string' });
+      return next(errorHanlder(400, 'title is required'));
     }
     if (typeof content !== 'string') {
-      return res.status(400).send({ error: 'content must be a string' });
+      return next(errorHanlder(400, 'content is required'));
+    }
+    if (!isValidObjectId(userId)) {
+      return next(errorHanlder(400, 'userId is invalid'));
     }
 
-    let post = new Post({ title, content });
+    let user = await User.findOne({ _id: userId });
+    if (!user) return next(errorHanlder(400, 'user does not exist'));
+    console.log(user);
+    let post = new Post({ ...req.body, user: userId });
     await post.save();
-    return res.send({ post });
+
+    return res.status(201).json(post);
   } catch (error) {
     console.log(error);
     res.status(500).send({ error: error.message });
