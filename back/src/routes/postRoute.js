@@ -8,7 +8,7 @@ const { isValidObjectId } = require('mongoose');
 
 postRouter.post('/', async (req, res) => {
   try {
-    const { title, content, userId } = req.body;
+    const { title, content, userId, username } = req.body;
 
     if (typeof title !== 'string') {
       return next(errorHanlder(400, 'title is required'));
@@ -19,11 +19,15 @@ postRouter.post('/', async (req, res) => {
     if (!isValidObjectId(userId)) {
       return next(errorHanlder(400, 'userId is invalid'));
     }
+    if (typeof username !== 'string') {
+      return next(errorHanlder(400, 'username is required'));
+    }
 
     let user = await User.findOne({ _id: userId });
     if (!user) return next(errorHanlder(400, 'user does not exist'));
     console.log(user);
     let post = new Post({ ...req.body, user: userId });
+    console.log(post);
     await post.save();
 
     return res.status(201).json(post);

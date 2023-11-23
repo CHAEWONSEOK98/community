@@ -59,6 +59,7 @@ const WritePage = () => {
         title,
         content,
         userId: currentUser.data._id,
+        username: currentUser.data.username,
       });
       console.log(data);
       navigate("/post-list");
