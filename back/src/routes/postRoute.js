@@ -46,12 +46,21 @@ postRouter.get('/', async (req, res) => {
 postRouter.get('/:postId', async (req, res) => {
   try {
     const { postId } = req.params;
-
     let post = await Post.findOne({ _id: postId });
     return res.send({ post });
   } catch (error) {
     console.log(error);
     res.status(500).send({ error: error.message });
+  }
+});
+
+postRouter.post('/my', async (req, res) => {
+  try {
+    const { userId } = req.body;
+    const posts = await Post.find({ user: userId });
+    return res.status(200).json(posts);
+  } catch (error) {
+    next(error);
   }
 });
 
