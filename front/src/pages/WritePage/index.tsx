@@ -1,6 +1,8 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import { RootState } from "../../store";
 
 const WritePage = () => {
   const [title, setTitle] = useState<string>("");
@@ -9,6 +11,8 @@ const WritePage = () => {
   const [updateContent, setUpdateContent] = useState<string>("");
   const { postId } = useParams();
   const navigate = useNavigate();
+
+  const { currentUser } = useSelector((state: RootState) => state.user);
 
   // update
   useEffect(() => {
@@ -51,10 +55,13 @@ const WritePage = () => {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
-      await axios.post(`http://localhost:3000/post`, {
+      const data = await axios.post(`http://localhost:3000/post`, {
         title,
         content,
+        userId: currentUser.data._id,
       });
+      console.log(data);
+      navigate("/post-list");
     } catch (error) {
       console.log(error);
       throw new Error("Failed to Post");
