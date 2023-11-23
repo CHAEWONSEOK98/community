@@ -4,6 +4,8 @@ import axios from "axios";
 import { AiOutlineMore } from "react-icons/ai";
 
 import Modal from "../../components/Modal";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store";
 
 interface Post {
   _id: string;
@@ -17,7 +19,11 @@ const PostPage = () => {
   const [modal, setModal] = useState<boolean>(false);
   const [toggle, setToggle] = useState<boolean>(false);
   let { postId } = useParams();
-
+  const {
+    currentUser: {
+      data: { _id },
+    },
+  } = useSelector((state: RootState) => state.user);
   useEffect(() => {
     (async () => {
       const { data } = await axios.get(`http://localhost:3000/post/${postId}`);
@@ -34,7 +40,6 @@ const PostPage = () => {
   const handleToggle = () => {
     setToggle((prev) => !prev);
   };
-
   return (
     <div className="  mx-auto mt-10 max-w-4xl px-4">
       {modal && <Modal setModal={setModal} />}
@@ -53,10 +58,12 @@ const PostPage = () => {
                     {element.createdAt.slice(11, 16)}
                   </span>
                   <div className="relative">
-                    <AiOutlineMore
-                      onClick={handleToggle}
-                      className="mt-1 h-4 w-4 cursor-pointer rounded-full border border-black"
-                    />
+                    {_id === element.user && (
+                      <AiOutlineMore
+                        onClick={handleToggle}
+                        className="mt-1 h-4 w-4 cursor-pointer rounded-full border border-black"
+                      />
+                    )}
                     {toggle && (
                       <div className="absolute  -left-12 top-6 h-20  w-28 rounded-sm border-2  bg-white text-sm">
                         <div className=" mt-3 flex flex-col items-center gap-2">
