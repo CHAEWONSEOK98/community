@@ -2,7 +2,7 @@ const { Router } = require('express');
 const userRouter = Router();
 const { verifyToken } = require('../utils/verifyToken');
 const { errorHanlder } = require('../utils/error');
-const { User } = require('../models/User');
+const { User } = require('../models');
 const bcryptjs = require('bcryptjs');
 
 userRouter.post('/update/:userId', verifyToken, async (req, res, next) => {

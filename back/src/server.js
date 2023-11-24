@@ -9,9 +9,7 @@ const app = express();
 
 const mongoose = require('mongoose');
 
-const { postRouter } = require('./routes/postRoute');
-const { authRouter } = require('./routes/authRoute');
-const { userRouter } = require('./routes/userRoute');
+const { authRouter, userRouter, postRouter } = require('./routes/');
 
 const server = async () => {
   try {
@@ -22,9 +20,9 @@ const server = async () => {
     app.use(cookieParser());
     app.use(cors({ origin: 'http://localhost:5173', credentials: true }));
 
-    app.use('/post', postRouter);
     app.use('/auth', authRouter);
     app.use('/user', userRouter);
+    app.use('/post', postRouter);
 
     app.use((error, req, res, next) => {
       const statusCode = error.statusCode || 500;

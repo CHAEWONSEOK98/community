@@ -1,10 +1,16 @@
 const { Router } = require('express');
 const postRouter = Router();
 
-const { Post } = require('../models/Post');
-const { User } = require('../models/User');
+const { User, Post } = require('../models');
+
 const { errorHanlder } = require('../utils/error');
 const { isValidObjectId } = require('mongoose');
+
+const { commentRouter } = require('./commentRoute');
+
+// Comment
+// '/post/:postId/comment'
+postRouter.use('/:postId/comment', commentRouter);
 
 postRouter.post('/', async (req, res) => {
   try {
@@ -25,9 +31,8 @@ postRouter.post('/', async (req, res) => {
 
     let user = await User.findOne({ _id: userId });
     if (!user) return next(errorHanlder(400, 'user does not exist'));
-    console.log(user);
-    let post = new Post({ ...req.body, user: userId });
-    console.log(post);
+
+    let post = new Post({ ...req.body, user });
     await post.save();
 
     return res.status(201).json(post);
