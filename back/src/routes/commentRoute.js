@@ -42,4 +42,16 @@ commentRouter.post('/', async (req, res) => {
   }
 });
 
+commentRouter.get('/', async (req, res) => {
+  try {
+    const { postId } = req.params;
+    if (!isValidObjectId(postId)) {
+      return res.status(400).send({ error: 'postId is invalid' });
+    }
+
+    const comments = await Comment.find({ post: postId });
+    return res.status(200).json(comments);
+  } catch (error) {}
+});
+
 module.exports = { commentRouter };
