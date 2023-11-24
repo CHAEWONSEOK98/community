@@ -127,10 +127,10 @@ const PostPage = () => {
             );
           })}
       </div>
-      <div className="space-y-4">
+      <div className="mb-20 space-y-4">
         {comments.map((comment) => (
-          <div>
-            <span>{comment.content}</span>
+          <div key={comment._id}>
+            <span className="whitespace-pre-wrap">{comment.content}</span>
           </div>
         ))}
       </div>
@@ -144,7 +144,7 @@ const PostPage = () => {
             value={commentValue}
             onChange={handleCommentChange}
             placeholder="댓글을 입력해주세요"
-            className="w-full resize-none rounded-[20px]  border border-solid bg-[#EEEEEE] px-[10px] py-2 pr-10 text-sm outline-none"
+            className="w-full resize-none  rounded-[20px]  border border-solid bg-[#EEEEEE] px-[10px] py-2 pr-10 text-sm outline-none"
           />
           <button className="absolute right-4 cursor-pointer p-2 text-xs">
             등록
