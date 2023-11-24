@@ -21,7 +21,7 @@ const PostCard = ({ post }: PostProps) => {
           />
 
           <div className="flex flex-col gap-2 p-2">
-            <h1 className="h-12 font-bold">{post.title}</h1>
+            <h1 className="h-12 font-bold">{post.title.slice(0, 60)}</h1>
             <p className="h-20 text-sm">{post.content.slice(0, 100)}</p>
             <footer className=" flex items-center justify-between">
               <div className="space-x-2">
