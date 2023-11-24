@@ -19,6 +19,7 @@ interface Post {
 const PostPage = () => {
   const [post, setPost] = useState<Post>([]);
   const [commentValue, setCommentValue] = useState<string>("");
+  const [comments, setComments] = useState<string[]>([]);
   const [modal, setModal] = useState<boolean>(false);
   const [toggle, setToggle] = useState<boolean>(false);
   let { postId } = useParams();
@@ -36,6 +37,15 @@ const PostPage = () => {
       setPost(postData);
     })();
   }, []);
+
+  useEffect(() => {
+    (async () => {
+      const { data } = await axios.get(
+        `http://localhost:3000/post/${postId}/comment`,
+      );
+      setComments(data);
+    })();
+  });
 
   const handleDelete = () => {
     setModal(true);
@@ -116,6 +126,13 @@ const PostPage = () => {
               </div>
             );
           })}
+      </div>
+      <div className="space-y-4">
+        {comments.map((comment) => (
+          <div>
+            <span>{comment.content}</span>
+          </div>
+        ))}
       </div>
 
       <div className="relative">
