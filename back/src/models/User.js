@@ -1,31 +1,30 @@
 const { Schema, model } = require('mongoose');
 
-const UserSchema = new Schema(
-  {
-    username: {
-      type: String,
-      required: true,
-      unique: true,
-    },
-    email: {
-      type: String,
-      required: true,
-      unique: true,
-    },
-    password: {
-      type: String,
-      required: true,
-    },
-    profilePicture: {
-      type: String,
-      default:
-        'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png',
-    },
+const moment = require('moment');
+const today = moment().format('YYYY-MM-DD HH:mm:ss');
+
+const UserSchema = new Schema({
+  username: {
+    type: String,
+    required: true,
+    unique: true,
   },
-  {
-    timestamps: true,
-  }
-);
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  password: {
+    type: String,
+    required: true,
+  },
+  profilePicture: {
+    type: String,
+    default:
+      'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png',
+  },
+  createdAt: { type: String, default: today },
+});
 
 const User = model('User', UserSchema);
 
