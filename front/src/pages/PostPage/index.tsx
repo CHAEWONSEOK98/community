@@ -2,6 +2,9 @@ import { Link, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { AiOutlineMore } from "react-icons/ai";
+import { MdOutlineMoreVert } from "react-icons/md";
+import { IoIosArrowBack } from "react-icons/io";
+import { TbArrowsDownUp } from "react-icons/tb";
 
 import Modal from "../../components/Modal";
 import { useSelector } from "react-redux";
@@ -23,11 +26,7 @@ const PostPage = () => {
   const [modal, setModal] = useState<boolean>(false);
   const [toggle, setToggle] = useState<boolean>(false);
   let { postId } = useParams();
-  const {
-    currentUser: {
-      data: { _id },
-    },
-  } = useSelector((state: RootState) => state.user);
+  const { currentUser } = useSelector((state: RootState) => state.user);
 
   useEffect(() => {
     (async () => {
@@ -45,7 +44,7 @@ const PostPage = () => {
       );
       setComments(data);
     })();
-  });
+  }, []);
 
   const handleDelete = () => {
     setModal(true);
@@ -65,12 +64,15 @@ const PostPage = () => {
     event: React.FormEvent<HTMLFormElement>,
   ) => {
     event.preventDefault();
+
     try {
       const comment = await axios.post(
         `http://localhost:3000/post/${postId}/comment`,
         {
           content: commentValue,
-          userId: _id,
+          userId: currentUser?.data._id,
+          username: currentUser?.data.username,
+          profilePicture: currentUser?.data.profilePicture,
         },
         { withCredentials: true },
       );
@@ -100,7 +102,7 @@ const PostPage = () => {
                       {element.createdAt.slice(11, 16)}
                     </span>
                     <div className="relative">
-                      {_id === element.user && (
+                      {currentUser?.data._id === element.user && (
                         <AiOutlineMore
                           onClick={handleToggle}
                           className="mt-1 h-4 w-4 cursor-pointer rounded-full border border-black"
@@ -127,29 +129,100 @@ const PostPage = () => {
             );
           })}
       </div>
-      <div className="mb-20 space-y-4">
-        {comments.map((comment) => (
-          <div key={comment._id}>
-            <span className="whitespace-pre-wrap">{comment.content}</span>
-          </div>
-        ))}
-      </div>
 
-      <div className="relative">
-        <form
-          onSubmit={handleCommentSubmit}
-          className="fixed bottom-0 left-1/2 flex  w-full -translate-x-1/2 items-center bg-white p-2"
-        >
-          <TextareaAutosize
-            value={commentValue}
-            onChange={handleCommentChange}
-            placeholder="댓글을 입력해주세요"
-            className="w-full resize-none  rounded-[20px]  border border-solid bg-[#EEEEEE] px-[10px] py-2 pr-10 text-sm outline-none"
-          />
-          <button className="absolute right-4 cursor-pointer p-2 text-xs">
-            등록
-          </button>
-        </form>
+      <div className="mt-20 space-y-4 overflow-scroll bg-white  pb-10 md:overflow-hidden ">
+        <header className="flex items-center border-b-2 border-gray-100 px-1 py-3">
+          <IoIosArrowBack className="cursor-pointer text-xl" />
+          <h1 className="font-bold">댓글({comments.length})</h1>
+        </header>
+        <div className="flex items-center justify-end gap-1 pb-2 pr-4 tracking-tighter text-gray-400">
+          <TbArrowsDownUp className="text-xs" />
+          <span className="text-xs font-bold">좋아요 순</span>
+        </div>
+        {currentUser?.data._id ? (
+          <div className="relative">
+            <form
+              onSubmit={handleCommentSubmit}
+              className=" mb-10 flex h-16 items-center  bg-white  p-2 md:max-w-4xl"
+            >
+              <TextareaAutosize
+                value={commentValue}
+                onChange={handleCommentChange}
+                placeholder="댓글을 입력해주세요"
+                className="w-full resize-none  rounded-[20px]  border border-solid bg-[#EEEEEE] px-[10px] py-2 pr-10 text-sm outline-none"
+              />
+              <button className="absolute right-4 cursor-pointer  pr-1 text-xs">
+                등록
+              </button>
+            </form>
+          </div>
+        ) : null}
+
+        {comments &&
+          comments.map((comment) => (
+            <div className="relative  pl-4 " key={comment._id}>
+              <div className="absolute">
+                <img
+                  src={comment.profilePicture}
+                  className="h-12 w-12 rounded-full ring-2 ring-violet-300"
+                />
+              </div>
+              <div className="flex flex-col pl-12">
+                <div className="flex flex-col gap-3 px-4">
+                  <div className="flex justify-between">
+                    <span className="text-sm font-bold">
+                      {comment.username}
+                    </span>
+                    <span className=" text-xs">
+                      {`${comment.createdAt}`.slice(0, 10).replace(/-/g, ".")}
+                    </span>
+                  </div>
+
+                  <main>
+                    <p className="mb-3 whitespace-pre-wrap text-sm ">
+                      {comment.content}
+                    </p>
+                  </main>
+
+                  <div className="flex items-center justify-between border-b-2 pb-4">
+                    <div className="flex gap-2">
+                      <button
+                        disabled={currentUser ? false : true}
+                        className="h-7 w-[74px] rounded-lg border border-[#E5E7EB] bg-[#EEEEEE] text-xs text-gray-500"
+                      >
+                        좋아요
+                      </button>
+                      <button
+                        disabled={currentUser ? false : true}
+                        className="h-7 w-[74px] rounded-lg border border-[#E5E7EB] bg-[#EEEEEE] text-xs text-gray-500"
+                      >
+                        대댓글
+                      </button>
+                    </div>
+                    <div>
+                      {comment.username === currentUser?.data.username ? (
+                        <button
+                          disabled={currentUser ? false : true}
+                          className="flex h-7 w-7 items-center justify-center rounded-lg border border-[#E5E7EB] bg-[#EEEEEE]"
+                        >
+                          x
+                        </button>
+                      ) : (
+                        <button
+                          disabled={currentUser ? false : true}
+                          className=" h-7 w-7 rounded-lg border border-[#E5E7EB] bg-[#EEEEEE]"
+                        >
+                          <MdOutlineMoreVert className="mx-auto" />
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+
+        {/* // */}
       </div>
     </div>
   );
