@@ -59,7 +59,23 @@ commentRouter.get('/', async (req, res) => {
 
     const comments = await Comment.find({ post: postId });
     return res.status(200).json(comments);
-  } catch (error) {}
+  } catch (error) {
+    return res.status(400).send({ error: error.message });
+  }
+});
+
+commentRouter.delete('/', async (req, res) => {
+  try {
+    const { commentId } = req.body;
+    if (!isValidObjectId(commentId)) {
+      return res.status(400).send({ error: 'commentId is invalid' });
+    }
+
+    await Comment.findOneAndDelete({ _id: commentId });
+    return res.status(200).json('삭제 완료');
+  } catch (error) {
+    return res.status(400).send({ error: error.message });
+  }
 });
 
 module.exports = { commentRouter };

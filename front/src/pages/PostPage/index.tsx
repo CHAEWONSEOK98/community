@@ -83,6 +83,21 @@ const PostPage = () => {
     }
   };
 
+  const handleCommentDelete = async (commentId) => {
+    try {
+      const res = await axios.delete(
+        `http://localhost:3000/post/${postId}/comment`,
+        {
+          data: {
+            commentId: commentId,
+          },
+        },
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <div className="mx-auto mt-10  flex  max-w-4xl flex-col  justify-between  px-4">
       <div>
@@ -202,6 +217,7 @@ const PostPage = () => {
                     <div>
                       {comment.username === currentUser?.data.username ? (
                         <button
+                          onClick={() => handleCommentDelete(comment._id)}
                           disabled={currentUser ? false : true}
                           className="flex h-7 w-7 items-center justify-center rounded-lg border border-[#E5E7EB] bg-[#EEEEEE]"
                         >
