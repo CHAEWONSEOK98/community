@@ -9,7 +9,7 @@ const { isValidObjectId } = require('mongoose');
 commentRouter.post('/', async (req, res) => {
   try {
     const { postId } = req.params;
-    const { content, userId } = req.body;
+    const { content, userId, username } = req.body;
     if (!isValidObjectId(postId)) {
       return res.status(400).send({ error: 'postId is invalid' });
     }
@@ -18,6 +18,9 @@ commentRouter.post('/', async (req, res) => {
     }
     if (typeof content !== 'string') {
       return res.status(400).send({ error: 'content is required' });
+    }
+    if (typeof username !== 'string') {
+      return res.status(400).send({ error: 'username is required' });
     }
 
     const [user, post] = await Promise.all([
@@ -32,6 +35,7 @@ commentRouter.post('/', async (req, res) => {
     const comment = new Comment({
       content,
       user,
+      username,
       post,
     });
 
