@@ -145,7 +145,7 @@ const PostPage = () => {
           })}
       </div>
 
-      <div className="mt-20 space-y-4 overflow-scroll bg-white  pb-10 md:overflow-hidden ">
+      <div className="mt-80 space-y-4 overflow-hidden bg-white  pb-10 ">
         <header className="flex items-center border-b-2 border-gray-100 px-1 py-3">
           <IoIosArrowBack className="cursor-pointer text-xl" />
           <h1 className="font-bold">댓글({comments.length})</h1>
@@ -154,28 +154,10 @@ const PostPage = () => {
           <TbArrowsDownUp className="text-xs" />
           <span className="text-xs font-bold">좋아요 순</span>
         </div>
-        {currentUser?.data._id ? (
-          <div className="relative">
-            <form
-              onSubmit={handleCommentSubmit}
-              className=" mb-10 flex h-16 items-center  bg-white  p-2 md:max-w-4xl"
-            >
-              <TextareaAutosize
-                value={commentValue}
-                onChange={handleCommentChange}
-                placeholder="댓글을 입력해주세요"
-                className="w-full resize-none  rounded-[20px]  border border-solid bg-[#EEEEEE] px-[10px] py-2 pr-10 text-sm outline-none"
-              />
-              <button className="absolute right-4 cursor-pointer  pr-1 text-xs">
-                등록
-              </button>
-            </form>
-          </div>
-        ) : null}
 
         {comments &&
           comments.map((comment) => (
-            <div className="relative  pl-4 " key={comment._id}>
+            <div className="relative  pl-4" key={comment._id}>
               <div className="absolute">
                 <img
                   src={comment.profilePicture}
@@ -237,6 +219,25 @@ const PostPage = () => {
               </div>
             </div>
           ))}
+
+        {currentUser?.data._id ? (
+          <div className="relative">
+            <form
+              onSubmit={handleCommentSubmit}
+              className=" flex  h-16 items-center  bg-white  p-2 md:max-w-4xl"
+            >
+              <TextareaAutosize
+                value={commentValue}
+                onChange={handleCommentChange}
+                placeholder="댓글을 입력해주세요"
+                className="w-full resize-none  rounded-[20px]  border border-solid bg-[#EEEEEE] px-[10px] py-2 pr-10 text-sm outline-none"
+              />
+              <button className="absolute right-4 cursor-pointer  pr-1 text-xs">
+                등록
+              </button>
+            </form>
+          </div>
+        ) : null}
 
         {/* // */}
       </div>
