@@ -4,6 +4,7 @@ const { User } = require('../models');
 const bcryptjs = require('bcryptjs');
 const { errorHanlder } = require('../utils/error');
 const jwt = require('jsonwebtoken');
+const { verifyToken } = require('../utils/verifyToken');
 
 authRouter.post('/register', async (req, res, next) => {
   try {
@@ -82,6 +83,17 @@ authRouter.post('/google', async (req, res, next) => {
 
 authRouter.get('/logout', (req, res) => {
   res.clearCookie('access_token').status(200).json('로그아웃 성공');
+});
+
+authRouter.delete('/:userId', verifyToken, async (req, res, next) => {
+  try {
+    await User.findOneAndDelete({
+      _id: req.params.userId,
+    });
+    res.status(200).json('삭제되었습니다.');
+  } catch (error) {
+    next(error);
+  }
 });
 
 module.exports = { authRouter };
