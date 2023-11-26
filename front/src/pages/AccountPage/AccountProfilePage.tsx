@@ -1,13 +1,7 @@
 import { HiPlusCircle } from "react-icons/hi";
 import { MdCancel } from "react-icons/md";
-import { useSelector, useDispatch } from "react-redux";
-import {
-  updateUserStart,
-  updateUserSuccess,
-  updateUserFailure,
-} from "../../store/user/userSlice";
+import { useAppDispatch, useAppSelector } from "../../store";
 import Header from "../../components/Account/Header";
-import { RootState } from "../../store";
 import { useState, useRef, useEffect } from "react";
 import {
   getDownloadURL,
@@ -16,15 +10,13 @@ import {
   uploadBytesResumable,
 } from "firebase/storage";
 import { app } from "../../firebase";
-import axios from "axios";
+import { updateUser } from "../../store/user/userThunkFunction";
 
 const AccountProfilePage = () => {
-  const dispatch = useDispatch();
-  const { currentUser, loading, error } = useSelector(
-    (state: RootState) => state.user,
-  );
+  const dispatch = useAppDispatch();
+  const { currentUser, error } = useAppSelector((state) => state.user);
   const [username, setUsername] = useState<string | undefined>(
-    currentUser.data.username,
+    currentUser?.username,
   );
   const filePickerRef = useRef(null);
   const [imageFile, setImageFile] = useState<File | undefined>(undefined);
@@ -32,12 +24,12 @@ const AccountProfilePage = () => {
   const [imageError, setImageError] = useState<boolean>(false);
   const [formData, setFormData] = useState({});
   const [updateSuccess, setUpdateSuccess] = useState<boolean>(false);
-  console.log(formData),
-    useEffect(() => {
-      if (imageFile) {
-        handleFileUpload(imageFile);
-      }
-    }, [imageFile]);
+
+  useEffect(() => {
+    if (imageFile) {
+      handleFileUpload(imageFile);
+    }
+  }, [imageFile]);
 
   const handleFileUpload = async (imageFile) => {
     const storage = getStorage(app);
@@ -49,7 +41,7 @@ const AccountProfilePage = () => {
       (snapshot) => {
         const progress =
           (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        console.log(progress);
+
         setImagePercent(progress);
       },
       (error) => {
@@ -64,10 +56,9 @@ const AccountProfilePage = () => {
   };
 
   const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.value.length > 16) return;
-    setUsername(event.target.value);
+    if (event.currentTarget.value.length > 16) return;
+    setUsername(event.currentTarget.value);
     setFormData({ ...formData, username: event.currentTarget.value });
-    console.log(formData);
   };
 
   const handleCancelClick = () => {
@@ -85,18 +76,10 @@ const AccountProfilePage = () => {
   const handleSubmit = async (evnet: React.FormEvent<HTMLFormElement>) => {
     evnet.preventDefault();
     try {
-      dispatch(updateUserStart());
-      const data = await axios.post(
-        `http://localhost:3000/user/update/${currentUser?.data._id}`,
-        formData,
-        { withCredentials: true },
-      );
-      console.log(data);
-
-      dispatch(updateUserSuccess(data));
+      dispatch(updateUser({ userId: currentUser?._id, formData }));
       setUpdateSuccess(true);
     } catch (error) {
-      dispatch(updateUserFailure(error));
+      console.log(error);
     }
   };
   return (
@@ -114,7 +97,7 @@ const AccountProfilePage = () => {
         <div className=" my-12 flex flex-col items-center">
           <div className="relative">
             <img
-              src={formData.profilePicture || currentUser?.data.profilePicture}
+              src={formData.profilePicture || currentUser?.profilePicture}
               alt="profile-image"
               className="h-24 w-24 cursor-pointer rounded-full"
               onClick={handleFileOpen}
@@ -162,7 +145,7 @@ const AccountProfilePage = () => {
 
         <button
           disabled={
-            currentUser.data.username === username &&
+            currentUser.username === username &&
             formData.profilePicture === undefined
               ? true
               : false

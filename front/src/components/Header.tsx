@@ -6,16 +6,14 @@ import { BsClipboard } from "react-icons/bs";
 import { MdOutlineLibraryBooks } from "react-icons/md";
 import { AiOutlineComment } from "react-icons/ai";
 import { Link } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
-import { RootState } from "../store";
-import { logOut } from "../store/user/userSlice";
 import { useState } from "react";
-import axios from "axios";
+import { logOutUser } from "../store/user/userThunkFunction";
+import { useAppDispatch, useAppSelector } from "../store";
 
 const Header = () => {
-  const { currentUser } = useSelector((state: RootState) => state.user);
+  const { currentUser } = useAppSelector((state) => state.user);
   const [seeMoreToggle, setSeeMoreToggle] = useState<boolean>(false);
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const handleToggleClick = () => {
     setSeeMoreToggle((prev) => !prev);
@@ -23,10 +21,7 @@ const Header = () => {
 
   const handleLogOut = async () => {
     try {
-      await axios.get("http://localhost:3000/auth/logout", {
-        withCredentials: true,
-      });
-      dispatch(logOut());
+      dispatch(logOutUser());
     } catch (error) {
       console.log(error);
     }
@@ -61,7 +56,7 @@ const Header = () => {
               className="flex items-center gap-1 text-base"
             >
               <img
-                src={currentUser.data.profilePicture}
+                src={currentUser.profilePicture}
                 alt="profile"
                 className="h-7 w-7 rounded-full object-cover"
               />
@@ -76,7 +71,7 @@ const Header = () => {
                 >
                   <Link to={`/account/info`}>
                     <button className="flex items-center gap-1 rounded-[18px] border p-2 text-xs">
-                      <span>{currentUser.data.username}님</span>
+                      <span>{currentUser?.username}님</span>
                       <IoIosArrowForward />
                     </button>
                   </Link>

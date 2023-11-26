@@ -1,6 +1,27 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import {
+  logInUser,
+  logOutUser,
+  updateUser,
+  deleteUser,
+} from "./userThunkFunction";
 
-const initialState = {
+interface CurrentUser {
+  createdAt: string;
+  email: string;
+  profilePicture: string;
+  username: string;
+  __v: number;
+  _id: string;
+}
+
+interface InitialState {
+  currentUser: null | CurrentUser;
+  loading: boolean;
+  error: boolean;
+}
+
+const initialState: InitialState = {
   currentUser: null,
   loading: false,
   error: false,
@@ -9,65 +30,63 @@ const initialState = {
 const userSlice = createSlice({
   name: "user",
   initialState,
-  reducers: {
-    logInStart: (state) => {
+  reducers: {},
+  extraReducers: (builder) => {
+    builder.addCase(logInUser.pending, (state) => {
       state.loading = true;
-    },
-    logInSuccess: (state, action) => {
-      state.currentUser = action.payload;
-      state.loading = false;
-      state.error = false;
-    },
-    logInFailure: (state, action) => {
+    });
+    builder.addCase(
+      logInUser.fulfilled,
+      (state, action: PayloadAction<CurrentUser>) => {
+        state.currentUser = action.payload;
+        state.loading = false;
+        state.error = false;
+      },
+    );
+    builder.addCase(logInUser.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload;
-    },
+    });
 
-    updateUserStart: (state) => {
+    builder.addCase(logOutUser.pending, (state) => {
       state.loading = true;
-    },
-    updateUserSuccess: (state, action) => {
-      state.currentUser = action.payload;
-      state.loading = false;
-      state.error = false;
-    },
-    updateUserFailure: (state, action) => {
-      state.loading = false;
-      state.error = action.payload;
-    },
-
-    deleteUserStart: (state) => {
-      state.loading = true;
-    },
-    deleteUserSuccess: (state) => {
+    });
+    builder.addCase(logOutUser.fulfilled, (state) => {
       state.currentUser = null;
       state.loading = false;
       state.error = false;
-    },
-    deleteUserFailure: (state, action) => {
+    });
+    builder.addCase(logOutUser.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload;
-    },
+    });
 
-    logOut: (state) => {
+    builder.addCase(updateUser.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(updateUser.fulfilled, (state, action) => {
+      state.currentUser = action.payload;
+      state.loading = false;
+      state.error = false;
+    });
+    builder.addCase(updateUser.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    });
+
+    builder.addCase(deleteUser.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(deleteUser.fulfilled, (state) => {
       state.currentUser = null;
       state.loading = false;
       state.error = false;
-    },
+    });
+    builder.addCase(deleteUser.rejected, (state) => {
+      state.loading = false;
+      state.error = action.payload;
+    });
   },
 });
-
-export const {
-  logInStart,
-  logInSuccess,
-  logInFailure,
-  updateUserStart,
-  updateUserSuccess,
-  updateUserFailure,
-  deleteUserStart,
-  deleteUserSuccess,
-  deleteUserFailure,
-  logOut,
-} = userSlice.actions;
 
 export default userSlice.reducer;

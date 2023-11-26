@@ -1,15 +1,8 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import axios from "axios";
-
-import {
-  logInStart,
-  logInSuccess,
-  logInFailure,
-} from "../../store/user/userSlice";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../store";
+import { useAppDispatch, useAppSelector } from "../../store";
 import OAuth from "../../components/OAuth";
+import { logInUser } from "../../store/user/userThunkFunction";
 
 interface FormData {
   email: string;
@@ -21,12 +14,10 @@ const LogInPage = () => {
     email: "",
     password: "",
   });
-  // const [error, setError] = useState<boolean>(false);
-  // const [loading, setLoading] = useState<boolean>(false);
-  const { loading, error } = useSelector((state: RootState) => state.user);
+  const { loading, error } = useAppSelector((state) => state.user);
 
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [event.target.id]: event.target.value });
@@ -34,24 +25,12 @@ const LogInPage = () => {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
-    try {
-      dispatch(logInStart());
-      const data = await axios.post(
-        `http://localhost:3000/auth/login`,
-        formData,
-        { withCredentials: true },
-      );
-
-      setFormData({
-        email: "",
-        password: "",
-      });
-      dispatch(logInSuccess(data));
-      navigate("/");
-    } catch (error) {
-      dispatch(logInFailure(error));
-    }
+    dispatch(logInUser(formData));
+    setFormData({
+      email: "",
+      password: "",
+    });
+    navigate("/");
   };
 
   return (

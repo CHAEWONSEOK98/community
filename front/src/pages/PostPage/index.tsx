@@ -7,8 +7,7 @@ import { IoIosArrowBack } from "react-icons/io";
 import { TbArrowsDownUp } from "react-icons/tb";
 
 import Modal from "../../components/Modal";
-import { useSelector } from "react-redux";
-import { RootState } from "../../store";
+import { useAppSelector } from "../../store";
 
 import TextareaAutosize from "react-textarea-autosize";
 
@@ -26,7 +25,7 @@ const PostPage = () => {
   const [modal, setModal] = useState<boolean>(false);
   const [toggle, setToggle] = useState<boolean>(false);
   let { postId } = useParams();
-  const { currentUser } = useSelector((state: RootState) => state.user);
+  const { currentUser } = useAppSelector((state) => state.user);
 
   useEffect(() => {
     (async () => {
@@ -70,13 +69,13 @@ const PostPage = () => {
         `http://localhost:3000/post/${postId}/comment`,
         {
           content: commentValue,
-          userId: currentUser?.data._id,
-          username: currentUser?.data.username,
-          profilePicture: currentUser?.data.profilePicture,
+          userId: currentUser?._id,
+          username: currentUser?.username,
+          profilePicture: currentUser?.profilePicture,
         },
         { withCredentials: true },
       );
-      console.log(comment);
+      setComments((prev) => [...prev, comment.data.comment]);
       setCommentValue("");
     } catch (error) {
       console.error(error);
@@ -93,6 +92,8 @@ const PostPage = () => {
           },
         },
       );
+      let result = comments.filter((comment) => comment._id !== commentId);
+      setComments(result);
     } catch (error) {
       console.error(error);
     }
@@ -117,7 +118,7 @@ const PostPage = () => {
                       {element.createdAt.slice(11, 16)}
                     </span>
                     <div className="relative">
-                      {currentUser?.data._id === element.user && (
+                      {currentUser?._id === element.user && (
                         <AiOutlineMore
                           onClick={handleToggle}
                           className="mt-1 h-4 w-4 cursor-pointer rounded-full border border-black"
@@ -197,7 +198,7 @@ const PostPage = () => {
                       </button>
                     </div>
                     <div>
-                      {comment.username === currentUser?.data.username ? (
+                      {comment.username === currentUser?.username ? (
                         <button
                           onClick={() => handleCommentDelete(comment._id)}
                           disabled={currentUser ? false : true}
@@ -220,7 +221,7 @@ const PostPage = () => {
             </div>
           ))}
 
-        {currentUser?.data._id ? (
+        {currentUser?._id ? (
           <div className="relative">
             <form
               onSubmit={handleCommentSubmit}

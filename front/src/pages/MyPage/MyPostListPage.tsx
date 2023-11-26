@@ -1,17 +1,16 @@
 import PostListLayout from "../../components/Layout/PostListLayout";
 import axios from "axios";
-import { useSelector } from "react-redux";
-import { RootState } from "../../store";
+import { useAppSelector } from "../../store";
 import { useEffect, useState } from "react";
 import PostCard from "../../components/PostCard";
 
 const MyPostListPage = () => {
-  const { currentUser } = useSelector((state: RootState) => state.user);
+  const { currentUser } = useAppSelector((state) => state.user);
   const [myPosts, setMyPosts] = useState([]);
   useEffect(() => {
     (async () => {
       const { data } = await axios.post(`http://localhost:3000/post/my`, {
-        userId: currentUser.data._id,
+        userId: currentUser._id,
       });
       setMyPosts(data);
     })();

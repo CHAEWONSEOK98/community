@@ -20,7 +20,10 @@ const RegisterPage = () => {
   const navigate = useNavigate();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [event.target.id]: event.target.value });
+    setFormData({
+      ...formData,
+      [event.currentTarget.id]: event.currentTarget.value,
+    });
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {

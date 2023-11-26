@@ -1,24 +1,14 @@
-import { FaCheckCircle } from "react-icons/fa";
 import Header from "../../components/Account/Header";
+import { FaCheckCircle } from "react-icons/fa";
 import { useState } from "react";
-import { RootState } from "../../store";
-import { useSelector, useDispatch } from "react-redux";
-import {
-  deleteUserStart,
-  deleteUserSuccess,
-  deleteUserFailure,
-} from "../../store/user/userSlice";
-import axios from "axios";
+import { useAppDispatch, useAppSelector } from "../../store";
+import { deleteUser } from "../../store/user/userThunkFunction";
 
 const AccountUnRegisterPage = () => {
   const [confirm, setConfirm] = useState<boolean>(true);
   const [deleteSuccess, setdeleteSuccess] = useState<boolean>(false);
-  const {
-    currentUser: {
-      data: { _id, error },
-    },
-  } = useSelector((state: RootState) => state.user);
-  const dispatch = useDispatch();
+  const { currentUser, error } = useAppSelector((state) => state.user);
+  const dispatch = useAppDispatch();
 
   const handleClick = () => {
     setConfirm((prev) => !prev);
@@ -26,19 +16,11 @@ const AccountUnRegisterPage = () => {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
     try {
-      dispatch(deleteUserStart());
-      const data = await axios.delete(
-        `http://localhost:3000/user/delete/${_id}`,
-        {
-          withCredentials: true,
-        },
-      );
-      dispatch(deleteUserSuccess(data));
+      dispatch(deleteUser(currentUser._id));
       setdeleteSuccess(true);
     } catch (error) {
-      dispatch(deleteUserFailure(error));
+      console.log(error);
     }
   };
   return (
