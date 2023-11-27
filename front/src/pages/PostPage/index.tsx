@@ -41,6 +41,7 @@ const PostPage = () => {
       const { data } = await axios.get(
         `http://localhost:3000/post/${postId}/comment`,
       );
+      console.log(data);
       setComments(data);
     })();
   }, []);
