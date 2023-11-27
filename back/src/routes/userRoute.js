@@ -1,6 +1,6 @@
 const { Router } = require('express');
 const userRouter = Router();
-const { verifyToken } = require('../utils/verifyToken');
+const { verifyToken } = require('../middleware/verifyToken');
 const { errorHanlder } = require('../utils/error');
 const { User } = require('../models');
 const bcryptjs = require('bcryptjs');

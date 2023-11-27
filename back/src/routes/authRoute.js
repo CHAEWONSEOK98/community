@@ -4,7 +4,7 @@ const { User } = require('../models');
 const bcryptjs = require('bcryptjs');
 const { errorHanlder } = require('../utils/error');
 const jwt = require('jsonwebtoken');
-const { verifyToken } = require('../utils/verifyToken');
+const { verifyToken } = require('../middleware/verifyToken');
 
 authRouter.post('/register', async (req, res, next) => {
   try {

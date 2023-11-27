@@ -1,7 +1,7 @@
 const { Router } = require('express');
 const postRouter = Router();
 
-const { User, Post } = require('../models');
+const { User, Post, Comment } = require('../models');
 
 const { errorHanlder } = require('../utils/error');
 const { isValidObjectId } = require('mongoose');
@@ -95,6 +95,8 @@ postRouter.delete('/:postId', async (req, res) => {
     const { postId } = req.params;
 
     await Post.findOneAndDelete({ _id: postId });
+    await Comment.deleteMany({ post: postId });
+
     res.json({ message: '요청하신 게시글이 삭제되었습니다.' });
   } catch (error) {
     console.log(error);
