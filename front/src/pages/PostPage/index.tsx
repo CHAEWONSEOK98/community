@@ -5,11 +5,13 @@ import { AiOutlineMore } from "react-icons/ai";
 import { MdOutlineMoreVert } from "react-icons/md";
 import { IoIosArrowBack } from "react-icons/io";
 import { TbArrowsDownUp } from "react-icons/tb";
+import { FaHeart } from "react-icons/fa";
 
 import Modal from "../../components/Modal";
-import { useAppSelector } from "../../store";
+import { useAppDispatch, useAppSelector } from "../../store";
 
 import TextareaAutosize from "react-textarea-autosize";
+import { getUser } from "../../store/user/userThunkFunction";
 
 interface Post {
   _id: string;
@@ -19,13 +21,16 @@ interface Post {
 }
 
 const PostPage = () => {
+  let { postId } = useParams();
+  const { currentUser } = useAppSelector((state) => state.user);
+  const dispatch = useAppDispatch();
+
   const [post, setPost] = useState<Post>([]);
   const [commentValue, setCommentValue] = useState<string>("");
   const [comments, setComments] = useState<string[]>([]);
   const [modal, setModal] = useState<boolean>(false);
   const [toggle, setToggle] = useState<boolean>(false);
-  let { postId } = useParams();
-  const { currentUser } = useAppSelector((state) => state.user);
+  const [likeToggle, setLikeToggle] = useState<boolean>(false);
 
   useEffect(() => {
     (async () => {
@@ -41,7 +46,7 @@ const PostPage = () => {
       const { data } = await axios.get(
         `http://localhost:3000/post/${postId}/comment`,
       );
-      console.log(data);
+
       setComments(data);
     })();
   }, []);
@@ -100,6 +105,26 @@ const PostPage = () => {
     }
   };
 
+  const handleLikeToggle = () => {
+    setLikeToggle((prev) => !prev);
+  };
+
+  const handleLike = async () => {
+    try {
+      const data = await axios.patch(
+        `http://localhost:3000/post/${postId}/like`,
+        {
+          userId: currentUser?._id,
+        },
+      );
+      console.log(data);
+      dispatch(getUser());
+    } catch (error) {
+      console.log(error);
+      setLikeToggle(false);
+    }
+  };
+
   return (
     <div className="mx-auto mt-10  flex  max-w-4xl flex-col  justify-between  px-4">
       <div>
@@ -109,15 +134,16 @@ const PostPage = () => {
           post.map((element: Post) => {
             return (
               <div key={element._id}>
-                <header className=" flex flex-col gap-2 border-b border-gray-400 pb-4">
+                <header className="relative flex flex-col gap-2 border-b border-gray-400 pb-4">
                   <h1 className="text-2xl font-bold">{element.title}</h1>
-                  <div className="flex items-center gap-2 text-sm  ">
+                  <div className="flex items-center  gap-2 text-sm  ">
                     <span className="opacity-70">{element.username}</span>
                     <span className="opacity-40">l</span>
                     <span className="opacity-70">
                       {element.createdAt.slice(0, 10)}{" "}
                       {element.createdAt.slice(11, 16)}
                     </span>
+
                     <div className="relative">
                       {currentUser?._id === element.user && (
                         <AiOutlineMore
@@ -136,6 +162,22 @@ const PostPage = () => {
                         </div>
                       )}
                     </div>
+                    {currentUser && (
+                      <button
+                        disabled={
+                          currentUser._id === element.user ? true : false
+                        }
+                        onClick={handleLike}
+                        className="absolute right-0"
+                      >
+                        <FaHeart
+                          onClick={handleLikeToggle}
+                          className={`cursor-pointer text-lg  ${
+                            likeToggle ? "text-red-600" : "opacity-40"
+                          }`}
+                        />
+                      </button>
+                    )}
                   </div>
                 </header>
 

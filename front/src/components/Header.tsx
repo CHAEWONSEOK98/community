@@ -64,7 +64,7 @@ const Header = () => {
             </li>
 
             {seeMoreToggle && (
-              <nav className="absolute right-1 top-10 w-48 rounded-[8px] border bg-white px-4 pt-4 shadow-lg md:w-72">
+              <nav className="absolute right-1 top-10 z-50 w-48 rounded-[8px] border bg-white px-4 pt-4 shadow-lg md:w-72">
                 <div
                   className="flex flex-col items-center"
                   onClick={handleToggleClick}

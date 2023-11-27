@@ -70,3 +70,15 @@ export const deleteUser = createAsyncThunk(
     }
   },
 );
+
+export const getUser = createAsyncThunk("user/getUser", async (_, thunkAPI) => {
+  try {
+    const response = await axios.get(`http://localhost:3000/user`, {
+      withCredentials: true,
+    });
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    return thunkAPI.rejectWithValue(error.response.data || error.message);
+  }
+});

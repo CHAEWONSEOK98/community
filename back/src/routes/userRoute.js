@@ -5,6 +5,14 @@ const { errorHanlder } = require('../utils/error');
 const { User } = require('../models');
 const bcryptjs = require('bcryptjs');
 
+userRouter.get('/', verifyToken, async (req, res, next) => {
+  try {
+    return res.json(req.user);
+  } catch (error) {
+    next(error);
+  }
+});
+
 userRouter.post('/update/:userId', verifyToken, async (req, res, next) => {
   if (req.user.id !== req.params.userId) {
     return next(errorHanlder(401, '본인 계정만 업데이트 가능합니다.'));

@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useAppSelector } from "../store";
 import { useLocation } from "react-router-dom";
+import { FaHeart } from "react-icons/fa";
 
 interface PostProps {
   _id: string;
@@ -27,15 +28,15 @@ const PostCard = ({ post }: PostProps) => {
           />
           <div className="flex flex-col gap-2 p-2">
             <h1 className="h-12 font-bold leading-5 tracking-tighter">
-              {post.title.slice(0, 80)}
+              {post.title.slice(0, 60)}
             </h1>
             <p className="h-10 text-sm tracking-tighter">
-              {post.content.slice(0, 100)}
+              {post.content.slice(0, 80)}
             </p>
             <footer className=" flex flex-col">
               {pathname === "/my/post-list" ? (
                 <div>
-                  <div className="mb-2 space-x-2">
+                  <div className="space-x-2">
                     <span className="text-xs">
                       {post.createdAt.slice(0, 10)}
                     </span>
@@ -55,11 +56,16 @@ const PostCard = ({ post }: PostProps) => {
                     <div className="flex items-center gap-1">
                       <img
                         className="h-8 w-8 rounded-full"
-                        src={currentUser?.profilePicture}
+                        src={`https://source.unsplash.com/random`}
                       />
-                      <span className="text-xs">{currentUser.username}</span>
+                      <span className="text-xs">{post.username}</span>
                     </div>
-                    <span className="text-xs">좋아요 수</span>
+                    <div className="flex items-center gap-1">
+                      <FaHeart className="text-sm" />
+                      <span className="pb-[2px] text-sm">
+                        {post.likes.length}
+                      </span>
+                    </div>
                   </div>
                 </div>
               )}

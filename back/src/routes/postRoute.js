@@ -104,4 +104,34 @@ postRouter.delete('/:postId', async (req, res) => {
   }
 });
 
+postRouter.patch('/:postId/like', async (req, res) => {
+  try {
+    const { postId } = req.params;
+    const { userId } = req.body;
+
+    if (!isValidObjectId(postId)) {
+      return res.status(400).send({ error: 'postId is invalid' });
+    }
+    if (!isValidObjectId(userId)) {
+      return res.status(400).send({ error: 'userId is invalid' });
+    }
+
+    await Post.findOneAndUpdate(
+      { _id: postId },
+      { $addToSet: { likes: userId } },
+      { new: true }
+    );
+
+    await User.findOneAndUpdate(
+      { _id: userId },
+      { $addToSet: { likes: postId } },
+      { new: true }
+    );
+
+    res.status(201).json('좋아요 성공');
+  } catch (error) {
+    res.status(500).send({ error: error.message });
+  }
+});
+
 module.exports = { postRouter };

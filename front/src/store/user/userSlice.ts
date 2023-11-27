@@ -4,6 +4,7 @@ import {
   logOutUser,
   updateUser,
   deleteUser,
+  getUser,
 } from "./userThunkFunction";
 
 interface CurrentUser {
@@ -83,6 +84,19 @@ const userSlice = createSlice({
       state.error = false;
     });
     builder.addCase(deleteUser.rejected, (state) => {
+      state.loading = false;
+      state.error = action.payload;
+    });
+
+    builder.addCase(getUser.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(getUser.fulfilled, (state, action) => {
+      state.currentUser = action.payload;
+      state.loading = false;
+      state.error = false;
+    });
+    builder.addCase(getUser.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload;
     });

@@ -1,8 +1,7 @@
 const { Router } = require('express');
 const commentRouter = Router({ mergeParams: true });
-
-const { User, Post, Comment } = require('../models');
 const { isValidObjectId } = require('mongoose');
+const { User, Post, Comment } = require('../models');
 
 // '/post/:postId/comment'
 
