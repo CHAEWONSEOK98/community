@@ -51,6 +51,18 @@ const PostPage = () => {
     })();
   }, []);
 
+  // 이미 좋아요 누른 게시글인지 아닌지 확인
+  useEffect(() => {
+    if (currentUser) {
+      let { likes } = currentUser;
+      let check = likes.indexOf(postId);
+
+      if (check !== -1) {
+        setLikeToggle(true);
+      }
+    }
+  }, []);
+
   const handleDelete = () => {
     setModal(true);
   };
