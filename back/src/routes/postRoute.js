@@ -63,10 +63,21 @@ postRouter.get('/:postId', async (req, res) => {
   }
 });
 
-postRouter.post('/my', async (req, res) => {
+postRouter.post('/my', async (req, res, next) => {
   try {
     const { userId } = req.body;
     const posts = await Post.find({ user: userId });
+    return res.status(200).json(posts);
+  } catch (error) {
+    next(error);
+  }
+});
+
+postRouter.post('/my/liked-posts', async (req, res, next) => {
+  try {
+    const { likes } = req.body;
+    const posts = await Post.find({ _id: likes });
+
     return res.status(200).json(posts);
   } catch (error) {
     next(error);

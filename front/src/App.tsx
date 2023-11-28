@@ -16,6 +16,7 @@ import PostPage from "./pages/PostPage/index.tsx";
 
 import WritePage from "../src/pages/WritePage";
 import MyPostListPage from "./pages/MyPage/MyPostListPage.tsx";
+import MyLikePostListPage from "./pages/MyLikePostListPage/index.tsx";
 
 const router = createBrowserRouter([
   {
@@ -69,6 +70,10 @@ const router = createBrowserRouter([
           {
             path: "/my/post-list",
             element: <MyPostListPage />,
+          },
+          {
+            path: "/my/like-post",
+            element: <MyLikePostListPage />,
           },
         ],
       },

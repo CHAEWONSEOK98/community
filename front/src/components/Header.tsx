@@ -5,6 +5,7 @@ import { IoIosArrowDown } from "react-icons/io";
 import { BsClipboard } from "react-icons/bs";
 import { MdOutlineLibraryBooks } from "react-icons/md";
 import { AiOutlineComment } from "react-icons/ai";
+import { AiOutlineLike } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { logOutUser } from "../store/user/userThunkFunction";
@@ -64,7 +65,7 @@ const Header = () => {
             </li>
 
             {seeMoreToggle && (
-              <nav className="absolute right-1 top-10 z-50 w-48 rounded-[8px] border bg-white px-4 pt-4 shadow-lg md:w-72">
+              <nav className="absolute right-0 top-10 z-50 w-48 rounded-[8px] border bg-white px-4 pt-4 shadow-lg md:w-72">
                 <div
                   className="flex flex-col items-center"
                   onClick={handleToggleClick}
@@ -95,6 +96,12 @@ const Header = () => {
                       <AiOutlineComment className="text-xl" />
                       <span className="text-sm">댓글 내역</span>
                     </li>
+                    <Link to={`/my/like-post`}>
+                      <li className="flex items-center gap-2">
+                        <AiOutlineLike className="text-xl" />
+                        <span className="text-sm">좋아요 게시글</span>
+                      </li>
+                    </Link>
                   </ul>
 
                   <footer className="my-4 w-full">
