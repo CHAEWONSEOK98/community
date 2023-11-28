@@ -117,8 +117,15 @@ const PostPage = () => {
     }
   };
 
-  const handleLikeToggle = () => {
+  const handleLikeUnLikeToggle = () => {
     setLikeToggle((prev) => !prev);
+
+    if (likeToggle === false) {
+      handleLike();
+    }
+    if (likeToggle === true) {
+      handleUnLike();
+    }
   };
 
   const handleLike = async () => {
@@ -129,11 +136,25 @@ const PostPage = () => {
           userId: currentUser?._id,
         },
       );
-      console.log(data);
       dispatch(getUser());
     } catch (error) {
       console.log(error);
       setLikeToggle(false);
+    }
+  };
+
+  const handleUnLike = async () => {
+    try {
+      const data = await axios.patch(
+        `http://localhost:3000/post/${postId}/unlike`,
+        {
+          userId: currentUser?._id,
+        },
+      );
+      dispatch(getUser());
+    } catch (error) {
+      console.log(error);
+      setLikeToggle(true);
     }
   };
 
@@ -179,11 +200,10 @@ const PostPage = () => {
                         disabled={
                           currentUser._id === element.user ? true : false
                         }
-                        onClick={handleLike}
                         className="absolute right-0"
                       >
                         <FaHeart
-                          onClick={handleLikeToggle}
+                          onClick={handleLikeUnLikeToggle}
                           className={`cursor-pointer text-lg  ${
                             likeToggle ? "text-red-600" : "opacity-40"
                           }`}
