@@ -108,6 +108,11 @@ postRouter.delete('/:postId', async (req, res) => {
     await Post.findOneAndDelete({ _id: postId });
     await Comment.deleteMany({ post: postId });
 
+    // user1의 게시물에 user2가 좋아요를 눌렀을 때
+    // 어느 날 user1이 게시글을 삭제한다면 user2의 좋아요 목록에서 해당 데이터를 삭제.
+    let userId = await User.find({ likes: postId });
+    await User.findOneAndUpdate({ _id: userId }, { $pull: { likes: postId } });
+
     res.json({ message: '요청하신 게시글이 삭제되었습니다.' });
   } catch (error) {
     console.log(error);
