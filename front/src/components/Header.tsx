@@ -1,31 +1,25 @@
-import { IoIosArrowForward } from "react-icons/io";
 import { BiSearch } from "react-icons/bi";
 import { BsMoonFill } from "react-icons/bs";
 import { IoIosArrowDown } from "react-icons/io";
-import { BsClipboard } from "react-icons/bs";
-import { MdOutlineLibraryBooks } from "react-icons/md";
-import { AiOutlineComment } from "react-icons/ai";
-import { AiOutlineLike } from "react-icons/ai";
+
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import { logOutUser } from "../store/user/userThunkFunction";
-import { useAppDispatch, useAppSelector } from "../store";
+import { useAppSelector } from "../store";
+import UserNavigationPanel from "./UserNavigationPanel";
 
 const Header = () => {
   const { currentUser } = useAppSelector((state) => state.user);
-  const [seeMoreToggle, setSeeMoreToggle] = useState<boolean>(false);
-  const dispatch = useAppDispatch();
+  const [userNavigationToggle, setUserNavigationToggle] =
+    useState<boolean>(false);
 
   const handleToggleClick = () => {
-    setSeeMoreToggle((prev) => !prev);
+    setUserNavigationToggle((prev) => !prev);
   };
 
-  const handleLogOut = async () => {
-    try {
-      dispatch(logOutUser());
-    } catch (error) {
-      console.log(error);
-    }
+  const handleBlur = () => {
+    setTimeout(() => {
+      setUserNavigationToggle(false);
+    }, 100);
   };
 
   return (
@@ -52,9 +46,11 @@ const Header = () => {
             >
               게시글 작성
             </Link>
-            <li
+            <div
               onClick={handleToggleClick}
-              className="flex items-center gap-1 text-base"
+              onBlur={handleBlur}
+              className="flex items-center gap-1  text-base"
+              tabIndex={0}
             >
               <img
                 src={currentUser.profilePicture}
@@ -62,59 +58,8 @@ const Header = () => {
                 className="h-7 w-7 rounded-full object-cover"
               />
               <IoIosArrowDown />
-            </li>
-
-            {seeMoreToggle && (
-              <nav className="absolute right-0 top-10 z-50 w-48 rounded-[8px] border bg-white px-4 pt-4 shadow-lg md:w-72">
-                <div
-                  className="flex flex-col items-center"
-                  onClick={handleToggleClick}
-                >
-                  <Link to={`/account/info`}>
-                    <button className="flex items-center gap-1 rounded-[18px] border p-2 text-xs">
-                      <span>{currentUser?.username}님</span>
-                      <IoIosArrowForward />
-                    </button>
-                  </Link>
-
-                  <ul className="mt-4 flex flex-col gap-4">
-                    <Link
-                      to={`/write`}
-                      className="flex items-center gap-2 md:hidden"
-                    >
-                      <BsClipboard className="text-xl" />
-                      <span className="text-sm">게시글 작성</span>
-                    </Link>
-                    <Link
-                      to={`/my/post-list`}
-                      className="flex items-center gap-2"
-                    >
-                      <MdOutlineLibraryBooks className="text-xl" />
-                      <span className="text-sm">게시글 내역</span>
-                    </Link>
-                    <li className="flex items-center gap-2">
-                      <AiOutlineComment className="text-xl" />
-                      <span className="text-sm">댓글 내역</span>
-                    </li>
-                    <Link to={`/my/like-post`}>
-                      <li className="flex items-center gap-2">
-                        <AiOutlineLike className="text-xl" />
-                        <span className="text-sm">좋아요 게시글</span>
-                      </li>
-                    </Link>
-                  </ul>
-
-                  <footer className="my-4 w-full">
-                    <button
-                      onClick={handleLogOut}
-                      className="w-full border-t  border-gray-300 pt-4 text-xs text-[#7A7A7A]"
-                    >
-                      로그아웃
-                    </button>
-                  </footer>
-                </div>
-              </nav>
-            )}
+              {userNavigationToggle ? <UserNavigationPanel /> : ""}
+            </div>
           </ul>
         ) : (
           <Link to={`/login`}>
