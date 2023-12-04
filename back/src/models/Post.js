@@ -5,7 +5,7 @@ const today = moment().format('YYYY-MM-DD HH:mm:ss');
 
 const PostSchema = new Schema({
   title: { type: String, required: true },
-  content: { type: String, required: true },
+  content: { type: [] },
   user: { type: Types.ObjectId, required: true, ref: 'user' },
   username: { type: String, required: true },
   likes: [{ type: Types.ObjectId }],

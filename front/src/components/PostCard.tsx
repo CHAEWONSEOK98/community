@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import { useAppSelector } from "../store";
 import { useLocation } from "react-router-dom";
 import { FaHeart } from "react-icons/fa";
 
@@ -10,8 +9,7 @@ interface PostProps {
   createdAt: string;
 }
 
-const PostCard = ({ post }: PostProps) => {
-  const { currentUser } = useAppSelector((state) => state.user);
+const PostCard = ({ post }) => {
   const location = useLocation();
   const { pathname } = location;
 
@@ -26,12 +24,15 @@ const PostCard = ({ post }: PostProps) => {
             src={`https://source.unsplash.com/random`}
             className="h-36 w-full rounded-md object-cover"
           />
-          <div className="flex flex-col gap-2 p-2">
-            <h1 className="h-12 font-bold leading-5 tracking-tighter">
+          <div className="flex flex-col  p-2">
+            <h1 className="h-12 break-words font-bold leading-5 tracking-tighter">
               {post.title.slice(0, 60)}
             </h1>
-            <p className="h-10 text-sm tracking-tighter">
-              {post.content.slice(0, 80)}
+            <p className="mb-1 text-sm tracking-tighter">
+              {`Lorem ipsum dolor sit amet consectetur adipisicing elit.
+              Repellendus necessitatibus asperiores unde nesciunt hic enim. Quis
+              ducimus ad voluptate ea illo. Suscipit sapiente consequuntur quam
+              natus quibusdam blanditiis mollitia doloremque!`.slice(0, 100)}
             </p>
             <footer className=" flex flex-col">
               {pathname === "/my/post-list" ? (

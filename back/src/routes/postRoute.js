@@ -12,21 +12,21 @@ const { commentRouter } = require('./commentRoute');
 // '/post/:postId/comment'
 postRouter.use('/:postId/comment', commentRouter);
 
-postRouter.post('/', async (req, res) => {
+postRouter.post('/', async (req, res, next) => {
   try {
     const { title, content, userId, username } = req.body;
 
-    if (typeof title !== 'string') {
-      return next(errorHanlder(400, 'title is required'));
+    if (!title.length || typeof title !== 'string') {
+      return next(errorHanlder(400, 'title error'));
     }
-    if (typeof content !== 'string') {
+    if (!content.blocks.length) {
       return next(errorHanlder(400, 'content is required'));
     }
     if (!isValidObjectId(userId)) {
       return next(errorHanlder(400, 'userId is invalid'));
     }
-    if (typeof username !== 'string') {
-      return next(errorHanlder(400, 'username is required'));
+    if (!username.length || typeof username !== 'string') {
+      return next(errorHanlder(400, 'username error'));
     }
 
     let user = await User.findOne({ _id: userId });

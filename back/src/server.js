@@ -9,7 +9,12 @@ const app = express();
 
 const mongoose = require('mongoose');
 
-const { authRouter, userRouter, postRouter } = require('./routes/');
+const {
+  authRouter,
+  userRouter,
+  postRouter,
+  imageRouter,
+} = require('./routes/');
 
 const server = async () => {
   try {
@@ -19,10 +24,13 @@ const server = async () => {
     app.use(express.json());
     app.use(cookieParser());
     app.use(cors({ origin: 'http://localhost:5173', credentials: true }));
+    app.use('/public', express.static('public'));
+    // app.use(express.static(path.join(__dirname, '../public/img')));
 
     app.use('/auth', authRouter);
     app.use('/user', userRouter);
     app.use('/post', postRouter);
+    app.use('/image', imageRouter);
 
     app.use((error, req, res, next) => {
       const statusCode = error.statusCode || 500;

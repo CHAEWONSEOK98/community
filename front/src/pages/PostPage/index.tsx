@@ -12,6 +12,7 @@ import { useAppDispatch, useAppSelector } from "../../store";
 
 import TextareaAutosize from "react-textarea-autosize";
 import { getUser } from "../../store/user/userThunkFunction";
+import Content from "../../components/Post/Content";
 
 interface Post {
   _id: string;
@@ -214,7 +215,9 @@ const PostPage = () => {
                 </header>
 
                 <main className="mt-2">
-                  <p>{element.content}</p>
+                  {element.content[0].blocks.map((block) => {
+                    return <Content block={block} />;
+                  })}
                 </main>
               </div>
             );
