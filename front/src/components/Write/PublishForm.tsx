@@ -12,6 +12,7 @@ import Title from "./Title";
 import Des from "./Des";
 import IsPublic from "./IsPublic";
 import Tags from "./Tags";
+import { Toaster, toast } from "react-hot-toast";
 
 const PublishForm = () => {
   const { currentUser } = useAppSelector((state) => state.user);
@@ -29,21 +30,50 @@ const PublishForm = () => {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    try {
-      if (thumbnailImage) {
-        let formData = new FormData();
-        formData.append("image", thumbnailImage);
 
-        let { data } = await axios.post(
-          `${import.meta.env.VITE_SERVER_DOMAIN}/image`,
-          formData,
-          { headers: { "Content-Type": "multipart/form-data" } },
-        );
+    if (thumbnailImage) {
+      let formData = new FormData();
+      formData.append("image", thumbnailImage);
 
-        let url = `http://localhost:3000/public/img/${data.key}`;
-        dispatch(setThumbnail(url));
-      }
+      axios
+        .post(`${import.meta.env.VITE_SERVER_DOMAIN}/image`, formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        })
+        .then(({ data }) => {
+          let url = `http://localhost:3000/public/img/${data.key}`;
 
+          let postObject = {
+            title,
+            content,
+            thumbnail: url,
+            des,
+            tags,
+            isPublic,
+            draft,
+            userId: currentUser?._id,
+            username: currentUser?.username,
+          };
+
+          dispatch(setThumbnail(url));
+
+          axios
+            .post(`${import.meta.env.VITE_SERVER_DOMAIN}/post`, postObject, {
+              withCredentials: true,
+            })
+            .then(() => {
+              navigate("/post-list");
+              dispatch(reset());
+            })
+            .catch((error) => {
+              console.log(error);
+              toast.error(error.response.data.error);
+            });
+        })
+        .catch((error) => {
+          console.log(error);
+          toast.error(error.response.data.error);
+        });
+    } else {
       let postObject = {
         title,
         content,
@@ -56,22 +86,24 @@ const PublishForm = () => {
         username: currentUser?.username,
       };
 
-      let end = await axios.post(
-        `${import.meta.env.VITE_SERVER_DOMAIN}/post`,
-        postObject,
-        { withCredentials: true },
-      );
-
-      if (end) {
-        navigate("/post-list");
-        dispatch(reset());
-      }
-    } catch (error) {
-      console.log(error);
+      axios
+        .post(`${import.meta.env.VITE_SERVER_DOMAIN}/post`, postObject, {
+          withCredentials: true,
+        })
+        .then(() => {
+          navigate("/post-list");
+          dispatch(reset());
+        })
+        .catch((error) => {
+          console.log(error);
+          toast.error(error.response.data.error);
+        });
     }
   };
+
   return (
     <section className=" relative  mx-auto h-screen items-center p-4 lg:flex lg:justify-center lg:gap-4">
+      <Toaster position="top-center" toastOptions={{ duration: 2000 }} />
       <div className=" lg:w-[30%]">
         <p className="text-xl font-bold">미리보기</p>
         <Thumbnail setThumbnailImage={setThumbnailImage} />

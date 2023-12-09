@@ -23,7 +23,7 @@ const Header = () => {
   };
 
   return (
-    <header className="flex h-24 items-center justify-between px-4">
+    <header className="sticky top-0 z-10 flex h-24 w-full items-center justify-between border-b-[1px] border-black bg-white px-4 lg:px-0">
       <div>
         <Link to={`/`}>
           <span className=" font-bold">Community</span>
@@ -33,9 +33,6 @@ const Header = () => {
       <ul className="relative flex cursor-pointer items-center gap-3">
         <li className="text-base">
           <BiSearch />
-        </li>
-        <li className="text-base">
-          <BsMoonFill />
         </li>
 
         {currentUser ? (
