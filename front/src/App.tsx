@@ -60,10 +60,6 @@ const router = createBrowserRouter([
           },
 
           {
-            path: "/write",
-            element: <WritePage />,
-          },
-          {
             path: "/write/:postId",
             element: <WritePage />,
           },
@@ -76,6 +72,15 @@ const router = createBrowserRouter([
             element: <MyLikePostListPage />,
           },
         ],
+      },
+    ],
+  },
+  {
+    element: <PrivateRoute />,
+    children: [
+      {
+        path: "/write",
+        element: <WritePage />,
       },
     ],
   },

@@ -216,7 +216,7 @@ const PostPage = () => {
 
                 <main className="mt-2">
                   {element.content[0].blocks.map((block) => {
-                    return <Content block={block} />;
+                    return <Content block={block} key={block.id} />;
                   })}
                 </main>
               </div>

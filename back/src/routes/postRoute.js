@@ -5,6 +5,7 @@ const { User, Post, Comment } = require('../models');
 
 const { errorHanlder } = require('../utils/error');
 const { isValidObjectId } = require('mongoose');
+const { verifyToken } = require('../middleware/verifyToken');
 
 const { commentRouter } = require('./commentRoute');
 
@@ -12,31 +13,68 @@ const { commentRouter } = require('./commentRoute');
 // '/post/:postId/comment'
 postRouter.use('/:postId/comment', commentRouter);
 
-postRouter.post('/', async (req, res, next) => {
+postRouter.post('/', verifyToken, async (req, res, next) => {
   try {
-    const { title, content, userId, username } = req.body;
+    let {
+      title,
+      content,
+      thumbnail,
+      des,
+      tags,
+      isPublic,
+      draft,
+      userId,
+      username,
+    } = req.body;
 
     if (!title.length || typeof title !== 'string') {
       return next(errorHanlder(400, 'title error'));
     }
-    if (!content.blocks.length) {
-      return next(errorHanlder(400, 'content is required'));
+    if (!draft) {
+      if (!content.blocks.length) {
+        return next(errorHanlder(400, 'content is required'));
+      }
+      if ((thumbnail && !thumbnail.length) || typeof thumbnail !== 'string') {
+        return next(errorHanlder(400, 'thumbnail error'));
+      }
+      if ((des && des.length > 200) || typeof des !== 'string') {
+        return next(errorHanlder(400, 'des error'));
+      }
+      if (typeof isPublic !== 'boolean') {
+        return next(errorHanlder(400, 'isPublic error'));
+      }
+      if (typeof draft !== 'boolean') {
+        return next(errorHanlder(400, 'draft error'));
+      }
+      if (!isValidObjectId(userId)) {
+        return next(errorHanlder(400, 'userId is invalid'));
+      }
+      if (!username.length || typeof username !== 'string') {
+        return next(errorHanlder(400, 'username error'));
+      }
     }
-    if (!isValidObjectId(userId)) {
-      return next(errorHanlder(400, 'userId is invalid'));
-    }
-    if (!username.length || typeof username !== 'string') {
-      return next(errorHanlder(400, 'username error'));
-    }
+
+    tags = tags.map((tag) => tag.toLowerCase());
 
     let user = await User.findOne({ _id: userId });
     if (!user) return next(errorHanlder(400, 'user does not exist'));
 
-    let post = new Post({ ...req.body, user });
+    let post = new Post({
+      title,
+      content,
+      draft,
+      thumbnail,
+      des,
+      isPublic,
+      tags,
+      user,
+      username,
+    });
     await post.save();
 
     return res.status(201).json(post);
   } catch (error) {
+    console.log('여기?');
     console.log(error);
     res.status(500).send({ error: error.message });
   }

@@ -1,3 +1,38 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  .editor-height {
+    @apply min-h-[calc(100%-40px)];
+  }
+
+  #editor h1,
+  h1 {
+    @apply text-5xl font-bold leading-normal max-md:text-4xl max-md:leading-snug !important;
+  }
+
+  #editor h2,
+  h2 {
+    @apply text-4xl font-bold leading-normal max-md:text-3xl max-md:leading-snug !important;
+  }
+
+  #editor h3,
+  h3 {
+    @apply text-3xl leading-loose max-md:text-2xl max-md:leading-normal !important;
+  }
+
+  #editor h4,
+  h4 {
+    @apply text-2xl leading-loose max-md:text-xl max-md:leading-normal !important;
+  }
+}
+
+.ce-block__content,
+.ce-toolbar__content {
+  max-width: 896px;
+}
+
+.image-tool__image-picture {
+  width: 100%;
+}

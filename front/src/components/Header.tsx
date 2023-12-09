@@ -50,7 +50,6 @@ const Header = () => {
               onClick={handleToggleClick}
               onBlur={handleBlur}
               className="flex items-center gap-1  text-base"
-              tabIndex={0}
             >
               <img
                 src={currentUser.profilePicture}

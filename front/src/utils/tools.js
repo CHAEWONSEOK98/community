@@ -1,7 +1,8 @@
 import Embed from "@editorjs/embed";
-import Header from "@editorjs/header";
 import Image from "@editorjs/image";
 import List from "@editorjs/list";
+import NestedList from "@editorjs/nested-list";
+import Header from "@editorjs/header";
 import Quote from "@editorjs/quote";
 import Marker from "@editorjs/marker";
 import InlineCode from "@editorjs/inline-code";
@@ -43,15 +44,7 @@ const uploadImageByFile = async (file) => {
 };
 
 export const tools = {
-  emebed: Embed,
-  header: {
-    class: Header,
-    config: {
-      placeholder: "Type Heading...",
-      levels: [2, 3, 4],
-      defaultLevel: 3,
-    },
-  },
+  embed: Embed,
   image: {
     class: Image,
     config: {
@@ -64,6 +57,20 @@ export const tools = {
   list: {
     class: List,
     inlineToolbar: true,
+  },
+  nestedlist: {
+    class: NestedList,
+    inlineToolbar: true,
+    config: {
+      defaultStyle: "unordered",
+    },
+  },
+  header: {
+    class: Header,
+    config: {
+      levels: [1, 2, 3, 4],
+      defaultLevel: 2,
+    },
   },
   quote: {
     class: Quote,
