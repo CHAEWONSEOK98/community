@@ -61,7 +61,7 @@ const Header = () => {
           </div>
         ) : (
           <Link to={`/login`}>
-            <li className="text-base">로그인</li>
+            <p className=" text-base">로그인</p>
           </Link>
         )}
       </div>

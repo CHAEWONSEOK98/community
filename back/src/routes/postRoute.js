@@ -74,7 +74,6 @@ postRouter.post('/', verifyToken, async (req, res, next) => {
 
     return res.status(201).json(post);
   } catch (error) {
-    console.log('여기?');
     console.log(error);
     res.status(500).send({ error: error.message });
   }
@@ -82,7 +81,7 @@ postRouter.post('/', verifyToken, async (req, res, next) => {
 
 postRouter.get('/', async (req, res) => {
   try {
-    let posts = await Post.find();
+    let posts = await Post.find({ draft: false });
     return res.send({ posts });
   } catch (error) {
     console.log(error);
@@ -101,10 +100,10 @@ postRouter.get('/:postId', async (req, res) => {
   }
 });
 
-postRouter.post('/my', async (req, res, next) => {
+postRouter.post('/my/post-list', async (req, res, next) => {
   try {
     const { userId } = req.body;
-    const posts = await Post.find({ user: userId });
+    const posts = await Post.find({ user: userId, draft: false });
     return res.status(200).json(posts);
   } catch (error) {
     next(error);
@@ -119,6 +118,16 @@ postRouter.post('/my/liked-posts', async (req, res, next) => {
     return res.status(200).json(posts);
   } catch (error) {
     next(error);
+  }
+});
+
+postRouter.get('/my/save-post', async (req, res) => {
+  try {
+    let posts = await Post.find({ draft: true });
+    return res.send({ posts });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ error: error.message });
   }
 });
 
@@ -154,6 +163,18 @@ postRouter.delete('/:postId', async (req, res) => {
     res.json({ message: '요청하신 게시글이 삭제되었습니다.' });
   } catch (error) {
     console.log(error);
+    res.status(500).send({ error: error.message });
+  }
+});
+
+postRouter.delete('/my/save-post/', async (req, res) => {
+  try {
+    let { postId } = req.body;
+
+    await Post.deleteOne({ _id: postId });
+
+    res.status(200).json('삭제 완료');
+  } catch (error) {
     res.status(500).send({ error: error.message });
   }
 });

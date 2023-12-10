@@ -48,7 +48,7 @@ const UserNavigationPanel = () => {
               <p className="text-sm">좋아요 내역</p>
             </li>
           </Link>
-          <Link to={`/my/save`}>
+          <Link to={`/my/save-post`}>
             <li className="flex items-center gap-2">
               <CiSaveDown2 className="text-xl" />
               <p className="text-sm">임시 저장 글</p>

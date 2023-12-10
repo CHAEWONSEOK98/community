@@ -17,8 +17,17 @@ import PostPage from "./pages/PostPage/index.tsx";
 import WritePage from "../src/pages/WritePage";
 import MyPostListPage from "./pages/MyPage/MyPostListPage.tsx";
 import MyLikePostListPage from "./pages/MyLikePostListPage/index.tsx";
+import MySavePostPage from "./pages/MySavePostPage/index.tsx";
 
 const router = createBrowserRouter([
+  {
+    path: "/register",
+    element: <RegisterPage />,
+  },
+  {
+    path: "/login",
+    element: <LogInPage />,
+  },
   {
     path: "/",
     element: <Root />,
@@ -26,14 +35,6 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <Home />,
-      },
-      {
-        path: "/register",
-        element: <RegisterPage />,
-      },
-      {
-        path: "/login",
-        element: <LogInPage />,
       },
       {
         path: "/post-list",
@@ -70,6 +71,10 @@ const router = createBrowserRouter([
           {
             path: "/my/like-post",
             element: <MyLikePostListPage />,
+          },
+          {
+            path: "/my/save-post",
+            element: <MySavePostPage />,
           },
         ],
       },
