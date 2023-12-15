@@ -1,4 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { getPost } from "./writeThunkFunction";
+import toast from "react-hot-toast";
 
 interface InitialState {
   editorState: string;
@@ -9,6 +11,9 @@ interface InitialState {
   tags: [] | string[];
   isPublic: boolean;
   draft: boolean;
+
+  loading: boolean;
+  error: string;
 }
 
 const initialState: InitialState = {
@@ -20,6 +25,9 @@ const initialState: InitialState = {
   tags: [],
   isPublic: true,
   draft: false,
+
+  loading: false,
+  error: "",
 };
 
 const writeSlice = createSlice({
@@ -71,20 +79,29 @@ const writeSlice = createSlice({
         (state.tags = []),
         (state.isPublic = true),
         (state.draft = false);
-
-      // state = {
-      //   editorState: "editor",
-      //   title: "",
-      //   content: [],
-      //   thumbnail: "",
-      //   des: "",
-      //   tags: [],
-      //   isPublic: true,
-      //   draft: false,
-      // };
-
-      // state = initialState;
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(getPost.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(getPost.fulfilled, (state, action) => {
+      (state.editorState = "editor"),
+        (state.title = action.payload.title),
+        (state.content = action.payload.content),
+        (state.thumbnail = action.payload.thumbnail),
+        (state.des = action.payload.des),
+        (state.tags = action.payload.tags),
+        (state.isPublic = action.payload.isPublic),
+        (state.draft = action.payload.draft);
+
+      state.loading = false;
+      state.error = "";
+    });
+    builder.addCase(getPost.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    });
   },
 });
 

@@ -6,7 +6,10 @@ import type { TypedUseSelectorHook } from "react-redux";
 import userReducer from "./user/userSlice";
 import writeReducer from "./write/writeSlice";
 
-const rootReducer = combineReducers({ user: userReducer, write: writeReducer });
+const rootReducer = combineReducers({
+  user: userReducer,
+  write: writeReducer,
+});
 
 const persistConfig = {
   key: "root",

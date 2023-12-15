@@ -25,6 +25,8 @@ postRouter.post('/', verifyToken, async (req, res, next) => {
       draft,
       userId,
       username,
+
+      postId,
     } = req.body;
 
     if (!title.length || typeof title !== 'string') {
@@ -55,6 +57,18 @@ postRouter.post('/', verifyToken, async (req, res, next) => {
     }
 
     tags = tags.map((tag) => tag.toLowerCase());
+
+    if (draft) {
+      // 임시 저장 한 글 업데이트
+      if (postId) {
+        await Post.findOneAndUpdate(
+          { _id: postId },
+          { title, content, draft: false, thumbnail, des, isPublic, tags }
+        );
+
+        return res.status(201).json('등록 완료');
+      }
+    }
 
     let user = await User.findOne({ _id: userId });
     if (!user) return next(errorHanlder(400, 'user does not exist'));

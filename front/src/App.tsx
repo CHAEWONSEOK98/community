@@ -61,10 +61,6 @@ const router = createBrowserRouter([
           },
 
           {
-            path: "/write/:postId",
-            element: <WritePage />,
-          },
-          {
             path: "/my/post-list",
             element: <MyPostListPage />,
           },
@@ -85,6 +81,10 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/write",
+        element: <WritePage />,
+      },
+      {
+        path: "/write/:postId",
         element: <WritePage />,
       },
     ],

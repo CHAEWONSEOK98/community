@@ -1,17 +1,19 @@
 import { BiSearch } from "react-icons/bi";
-import { BsMoonFill } from "react-icons/bs";
 import { IoIosArrowDown } from "react-icons/io";
 import { HiOutlinePencilSquare } from "react-icons/hi2";
 
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import { useAppSelector } from "../store";
+import { useAppDispatch, useAppSelector } from "../store";
 import UserNavigationPanel from "./UserNavigationPanel";
+import { reset } from "../store/write/writeSlice";
 
 const Header = () => {
   const { currentUser } = useAppSelector((state) => state.user);
   const [userNavigationToggle, setUserNavigationToggle] =
     useState<boolean>(false);
+
+  const dispatch = useAppDispatch();
 
   const handleToggleClick = () => {
     setUserNavigationToggle((prev) => !prev);
@@ -21,6 +23,10 @@ const Header = () => {
     setTimeout(() => {
       setUserNavigationToggle(false);
     }, 100);
+  };
+
+  const handleWriteReset = () => {
+    dispatch(reset());
   };
 
   return (
@@ -41,7 +47,11 @@ const Header = () => {
       <div className="relative flex cursor-pointer items-center gap-3">
         {currentUser ? (
           <div className="flex items-center gap-3">
-            <Link to={`/write`} className="relative hidden md:block">
+            <Link
+              to={`/write`}
+              className="relative hidden md:block"
+              onClick={handleWriteReset}
+            >
               <p className="rounded-md pl-8 opacity-70 md:flex">Write</p>
               <HiOutlinePencilSquare className="absolute left-0 top-1/2 h-8 w-8 -translate-y-1/2 opacity-50" />
             </Link>
@@ -61,7 +71,7 @@ const Header = () => {
           </div>
         ) : (
           <Link to={`/login`}>
-            <p className=" text-base">로그인</p>
+            <p className=" w-12 text-base">로그인</p>
           </Link>
         )}
       </div>

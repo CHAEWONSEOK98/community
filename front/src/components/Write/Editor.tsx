@@ -13,7 +13,7 @@ import Title from "./Title";
 import { Toaster, toast } from "react-hot-toast";
 import axios from "axios";
 
-const Editor = () => {
+const Editor = ({ postId }: string) => {
   const { currentUser } = useAppSelector((state) => state.user);
   const { title, content, thumbnail, des, tags, isPublic, draft, editorState } =
     useAppSelector((state) => state.write);
@@ -28,13 +28,17 @@ const Editor = () => {
       setEditor(
         new EditorJS({
           holder: "editor",
-          data: content,
+          data: Array.isArray(content) ? content[0] : content,
           tools: tools,
           placeholder: "내용을 입력하세요",
         }),
       );
     }
   }, []);
+
+  const handleReset = () => {
+    dispatch(reset());
+  };
 
   const handleDraft = (event: React.MouseEvent<HTMLButtonElement>) => {
     if (disable === true) return;
@@ -61,9 +65,9 @@ const Editor = () => {
           draft: true,
           userId: currentUser?._id,
           username: currentUser?.username,
-        };
 
-        console.log(postObject);
+          postId,
+        };
 
         axios
           .post(`${import.meta.env.VITE_SERVER_DOMAIN}/post`, postObject, {
@@ -77,8 +81,8 @@ const Editor = () => {
 
             setTimeout(() => {
               dispatch(reset());
-              navigate("/post-list");
-            }, 500);
+              navigate("/my/save-post");
+            }, 1000);
           })
           .catch((error) => {
             setDisable(false);
@@ -101,7 +105,6 @@ const Editor = () => {
         .then((data) => {
           if (data.blocks.length) {
             dispatch(setContent(data));
-            dispatch(setDraft(false));
             dispatch(editorStateToggle("publishForm"));
           } else {
             return toast.error("내용을 작성해주세요");
@@ -115,7 +118,7 @@ const Editor = () => {
 
   return (
     <div className="relative mx-auto  h-screen  w-full  max-w-4xl">
-      <Toaster position="top-center" toastOptions={{ duration: 2000 }} />
+      <Toaster position="top-center" toastOptions={{ duration: 900 }} />
 
       <section className="editor-height">
         <Title editorState={editorState} />
@@ -124,7 +127,10 @@ const Editor = () => {
 
       <footer className="h-18 fixed bottom-0 z-10 mt-10 flex  w-full  max-w-4xl justify-between  bg-white p-4">
         <Link to={`/`}>
-          <button className="rounded-full bg-black px-5 py-3 text-sm  text-white hover:bg-opacity-80">
+          <button
+            onClick={handleReset}
+            className="rounded-full bg-black px-5 py-3 text-sm  text-white hover:bg-opacity-80"
+          >
             뒤로
           </button>
         </Link>

@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useAppSelector, useAppDispatch } from "../../store";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useState } from "react";
 import {
   editorStateToggle,
@@ -23,6 +23,7 @@ const PublishForm = () => {
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const { postId } = useParams();
 
   const handleBack = () => {
     dispatch(editorStateToggle("editor"));
@@ -52,6 +53,8 @@ const PublishForm = () => {
             draft,
             userId: currentUser?._id,
             username: currentUser?.username,
+
+            postId,
           };
 
           dispatch(setThumbnail(url));
@@ -61,8 +64,9 @@ const PublishForm = () => {
               withCredentials: true,
             })
             .then(() => {
-              navigate("/post-list");
+              navigate("/");
               dispatch(reset());
+              location.reload("/my/save-post");
             })
             .catch((error) => {
               console.log(error);
@@ -84,15 +88,19 @@ const PublishForm = () => {
         draft,
         userId: currentUser?._id,
         username: currentUser?.username,
+
+        postId,
       };
 
       axios
         .post(`${import.meta.env.VITE_SERVER_DOMAIN}/post`, postObject, {
           withCredentials: true,
         })
-        .then(() => {
-          navigate("/post-list");
+        .then((data) => {
+          navigate("/");
+          toast.success(data);
           dispatch(reset());
+          location.reload("/my/save-post");
         })
         .catch((error) => {
           console.log(error);
