@@ -32,19 +32,6 @@ const MySavePostPage = () => {
     })();
   }, []);
 
-  // useEffect(() => {
-  //   if (!editor.isReady) {
-  //     setEditor(
-  //       new EditorJS({
-  //         holder: "editor",
-  //         data: Array.isArray(content) ? content[0] : content,
-  //         tools: tools,
-  //         placeholder: "내용을 입력하세요",
-  //       }),
-  //     );
-  //   }
-  // }, []);
-
   const handleDelete = async (
     postId: string,
     event: React.MouseEvent<HTMLButtonElement>,
