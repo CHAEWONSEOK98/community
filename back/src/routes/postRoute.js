@@ -68,6 +68,15 @@ postRouter.post('/', verifyToken, async (req, res, next) => {
 
         return res.status(201).json('등록 완료');
       }
+    } else {
+      if (postId) {
+        await Post.findOneAndUpdate(
+          { _id: postId },
+          { title, content, draft, thumbnail, des, isPublic, tags }
+        );
+
+        return res.status(201).json('수정 완료');
+      }
     }
 
     let user = await User.findOne({ _id: userId });
