@@ -25,7 +25,6 @@ const uploadImageByURL = (event) => {
 };
 
 const uploadImageByFile = async (file) => {
-  console.log("file", file);
   const formData = new FormData();
   formData.append("image", file);
 
@@ -33,7 +32,7 @@ const uploadImageByFile = async (file) => {
     headers: { "Content-Type": "multipart/form-data" },
   });
 
-  let url = `http://localhost:3000/public/img/${data.key}`;
+  let url = `https://image-foundation.s3.ap-northeast-2.amazonaws.com/${data.key}`;
 
   if (data) {
     return {

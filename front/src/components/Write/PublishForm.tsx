@@ -41,7 +41,7 @@ const PublishForm = () => {
           headers: { "Content-Type": "multipart/form-data" },
         })
         .then(({ data }) => {
-          let url = `http://localhost:3000/public/img/${data.key}`;
+          let url = `https://image-foundation.s3.ap-northeast-2.amazonaws.com/${data.key}`;
 
           let postObject = {
             title,
