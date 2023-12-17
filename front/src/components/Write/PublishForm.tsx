@@ -1,12 +1,7 @@
 import axios from "axios";
 import { useAppSelector, useAppDispatch } from "../../store";
 import { useNavigate, useParams } from "react-router-dom";
-import { useState } from "react";
-import {
-  editorStateToggle,
-  setThumbnail,
-  reset,
-} from "../../store/write/writeSlice";
+import { editorStateToggle, reset } from "../../store/write/writeSlice";
 import Thumbnail from "./Thumbnail";
 import Title from "./Title";
 import Des from "./Des";
@@ -19,8 +14,6 @@ const PublishForm = () => {
   const { title, content, thumbnail, des, tags, isPublic, draft, editorState } =
     useAppSelector((state) => state.write);
 
-  const [thumbnailImage, setThumbnailImage] = useState<any>();
-
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { postId } = useParams();
@@ -29,84 +22,37 @@ const PublishForm = () => {
     dispatch(editorStateToggle("editor"));
   };
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (thumbnailImage) {
-      let formData = new FormData();
-      formData.append("image", thumbnailImage);
+    let postObject = {
+      title,
+      content,
+      thumbnail,
+      des,
+      tags,
+      isPublic,
+      draft,
+      userId: currentUser?._id,
+      username: currentUser?.username,
 
-      axios
-        .post(`${import.meta.env.VITE_SERVER_DOMAIN}/image`, formData, {
-          headers: { "Content-Type": "multipart/form-data" },
-        })
-        .then(({ data }) => {
-          let url = `https://image-foundation.s3.ap-northeast-2.amazonaws.com/${data.key}`;
+      postId,
+    };
 
-          let postObject = {
-            title,
-            content,
-            thumbnail: url,
-            des,
-            tags,
-            isPublic,
-            draft,
-            userId: currentUser?._id,
-            username: currentUser?.username,
-
-            postId,
-          };
-
-          dispatch(setThumbnail(url));
-
-          axios
-            .post(`${import.meta.env.VITE_SERVER_DOMAIN}/post`, postObject, {
-              withCredentials: true,
-            })
-            .then(() => {
-              navigate("/");
-              dispatch(reset());
-              location.reload("/my/save-post");
-            })
-            .catch((error) => {
-              console.log(error);
-              toast.error(error.response.data.error);
-            });
-        })
-        .catch((error) => {
-          console.log(error);
-          toast.error(error.response.data.error);
-        });
-    } else {
-      let postObject = {
-        title,
-        content,
-        thumbnail,
-        des,
-        tags,
-        isPublic,
-        draft,
-        userId: currentUser?._id,
-        username: currentUser?.username,
-
-        postId,
-      };
-
-      axios
-        .post(`${import.meta.env.VITE_SERVER_DOMAIN}/post`, postObject, {
-          withCredentials: true,
-        })
-        .then((data) => {
-          navigate("/");
-          toast.success(data);
-          dispatch(reset());
-          location.reload("/my/save-post");
-        })
-        .catch((error) => {
-          console.log(error);
-          toast.error(error.response.data.error);
-        });
-    }
+    axios
+      .post(`${import.meta.env.VITE_SERVER_DOMAIN}/post`, postObject, {
+        withCredentials: true,
+      })
+      .then((data) => {
+        navigate("/");
+        toast.success(data);
+        dispatch(reset());
+        location.reload("/my/save-post");
+      })
+      .catch((error) => {
+        console.log(error);
+        toast.error(error.response.data.error);
+      });
   };
 
   return (
@@ -114,7 +60,7 @@ const PublishForm = () => {
       <Toaster position="top-center" toastOptions={{ duration: 2000 }} />
       <div className=" lg:w-[30%]">
         <p className="text-xl font-bold">미리보기</p>
-        <Thumbnail setThumbnailImage={setThumbnailImage} />
+        <Thumbnail />
         <Title editorState={editorState} />
         <Des />
       </div>
