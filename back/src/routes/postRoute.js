@@ -104,7 +104,18 @@ postRouter.post('/', verifyToken, async (req, res, next) => {
 
 postRouter.get('/', async (req, res) => {
   try {
-    let posts = await Post.find({ draft: false }).sort({ _id: -1 });
+    const { lastId } = req.query;
+    if (lastId && !mongoose.isValidObjectId(lastId)) {
+      throw new Error('invalid lastId');
+    }
+
+    let posts = await Post.find(
+      lastId
+        ? { draft: false, isPublic: true, _id: { $lt: lastId } }
+        : { draft: false, isPublic: true }
+    )
+      .sort({ _id: -1 })
+      .limit(10);
     return res.send({ posts });
   } catch (error) {
     console.log(error);
