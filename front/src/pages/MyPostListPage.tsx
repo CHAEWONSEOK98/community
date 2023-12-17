@@ -20,7 +20,10 @@ const MyPostListPage = () => {
     `http://localhost:3000/post/my/post-list/private`,
   );
 
+  const [loading, setLoading] = useState<boolean>(false);
+
   useEffect(() => {
+    setLoading(true);
     (async () => {
       try {
         const { data } = await axios.post(`${publicPostsUrl}`, {
@@ -30,11 +33,14 @@ const MyPostListPage = () => {
       } catch (error) {
         console.log(error);
         toast.error(error.response.data.error);
+      } finally {
+        setLoading(false);
       }
     })();
   }, [publicPostsUrl]);
 
   useEffect(() => {
+    setLoading(true);
     (async () => {
       try {
         const { data } = await axios.post(`${privatePostsUrl}`, {
@@ -45,6 +51,8 @@ const MyPostListPage = () => {
       } catch (error) {
         console.log(error);
         toast.error(error.response.data.error);
+      } finally {
+        setLoading(false);
       }
     })();
   }, [privatePostsUrl]);
@@ -54,7 +62,7 @@ const MyPostListPage = () => {
   };
 
   const handleSeeMore = () => {
-    if (!publicPosts.length) return;
+    if (!publicPosts.length || loading === true) return;
 
     if (publicToggle) {
       const lastPublicPostId = publicPosts[publicPosts.length - 1]._id;
@@ -94,7 +102,8 @@ const MyPostListPage = () => {
 
       <button
         onClick={handleSeeMore}
-        className="mb-2 w-full rounded-md bg-black py-2 font-bold text-white"
+        disabled={loading}
+        className="mb-2 w-full rounded-md bg-black py-2 font-bold text-white disabled:opacity-25"
       >
         더보기
       </button>
