@@ -4,7 +4,7 @@ const postRouter = Router();
 const { User, Post, Comment } = require('../models');
 
 const { errorHanlder } = require('../utils/error');
-const { isValidObjectId } = require('mongoose');
+const { isValidObjectId, default: mongoose } = require('mongoose');
 const { verifyToken } = require('../middleware/verifyToken');
 
 const { commentRouter } = require('./commentRoute');
@@ -104,7 +104,7 @@ postRouter.post('/', verifyToken, async (req, res, next) => {
 
 postRouter.get('/', async (req, res) => {
   try {
-    let posts = await Post.find({ draft: false });
+    let posts = await Post.find({ draft: false }).sort({ _id: -1 });
     return res.send({ posts });
   } catch (error) {
     console.log(error);
@@ -123,10 +123,64 @@ postRouter.get('/:postId', async (req, res) => {
   }
 });
 
-postRouter.post('/my/post-list', async (req, res, next) => {
+// 게시글 내역 공개 get
+postRouter.post('/my/post-list/public', async (req, res, next) => {
   try {
     const { userId } = req.body;
-    const posts = await Post.find({ user: userId, draft: false });
+    const { lastId } = req.query;
+
+    if (userId && !mongoose.isValidObjectId(userId)) {
+      throw new Error('invalid userId');
+    }
+    if (lastId && !mongoose.isValidObjectId(lastId)) {
+      throw new Error('invalid lastId');
+    }
+
+    const posts = await Post.find(
+      lastId
+        ? {
+            user: userId,
+            draft: false,
+            isPublic: true,
+            _id: { $lt: lastId },
+          }
+        : { user: userId, draft: false, isPublic: true }
+    )
+      .limit(20)
+      .sort({ _id: -1 });
+
+    return res.status(200).json(posts);
+  } catch (error) {
+    next(error);
+  }
+});
+
+// 게시글 내역 비공개 get
+postRouter.post('/my/post-list/private', async (req, res, next) => {
+  try {
+    const { userId } = req.body;
+    const { lastId } = req.query;
+
+    if (userId && !mongoose.isValidObjectId(userId)) {
+      throw new Error('invalid userId');
+    }
+    if (lastId && !mongoose.isValidObjectId(lastId)) {
+      throw new Error('invalid lastId');
+    }
+
+    const posts = await Post.find(
+      lastId
+        ? {
+            user: userId,
+            draft: false,
+            isPublic: false,
+            _id: { $lt: lastId },
+          }
+        : { user: userId, draft: false, isPublic: false }
+    )
+      .limit(8)
+      .sort({ _id: -1 });
+
     return res.status(200).json(posts);
   } catch (error) {
     next(error);
