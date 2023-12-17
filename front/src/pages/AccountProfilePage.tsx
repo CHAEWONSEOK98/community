@@ -1,7 +1,7 @@
 import { HiPlusCircle } from "react-icons/hi";
 import { MdCancel } from "react-icons/md";
-import { useAppDispatch, useAppSelector } from "../../store";
-import Header from "../../components/Account/Header";
+import { useAppDispatch, useAppSelector } from "../store";
+import Header from "../components/Account/Header";
 import { useState, useRef, useEffect } from "react";
 import {
   getDownloadURL,
@@ -9,8 +9,8 @@ import {
   ref,
   uploadBytesResumable,
 } from "firebase/storage";
-import { app } from "../../firebase";
-import { updateUser } from "../../store/user/userThunkFunction";
+import { app } from "../firebase";
+import { updateUser } from "../store/user/userThunkFunction";
 
 const AccountProfilePage = () => {
   const dispatch = useAppDispatch();

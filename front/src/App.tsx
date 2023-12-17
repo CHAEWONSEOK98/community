@@ -1,23 +1,23 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
-import Root from "./pages/Root/index.tsx";
-import Home from "./pages/HomePage/index.tsx";
+import Root from "./pages/Root.tsx";
+import Home from "./pages/HomePage.tsx";
 
-import RegisterPage from "./pages/RegisterPage/index.tsx";
-import LogInPage from "./pages/LogInPage/index.tsx";
+import RegisterPage from "./pages/RegisterPage";
+import LogInPage from "./pages/LogInPage.tsx";
 
 import PrivateRoute from "./components/PrivateRoute.tsx";
-import AccountPage from "./pages/AccountPage/index.tsx";
-import AccountProfilePage from "./pages/AccountPage/AccountProfilePage.tsx";
-import AccountUnRegisterPage from "./pages/AccountPage/AccountUnRegisterPage.tsx";
+import AccountInfoPage from "./pages/AccountInfoPage.tsx";
+import AccountProfilePage from "./pages/AccountProfilePage.tsx";
+import AccountUnRegisterPage from "./pages/AccountUnRegisterPage.tsx";
 
-import PostListPage from "./pages/PostListPage/index.tsx";
-import PostPage from "./pages/PostPage/index.tsx";
+import PostListPage from "./pages/PostListPage.tsx";
+import PostPage from "./pages/PostPage.tsx";
 
-import WritePage from "../src/pages/WritePage";
-import MyPostListPage from "./pages/MyPage/MyPostListPage.tsx";
-import MyLikePostListPage from "./pages/MyLikePostListPage/index.tsx";
-import MySavePostPage from "./pages/MySavePostPage/index.tsx";
+import WritePage from "./pages/WritePage.tsx";
+import MyPostListPage from "./pages/MyPostListPage.tsx";
+import MyLikePostListPage from "./pages/MyLikePostListPage.tsx";
+import MySavePostPage from "./pages/MySavePostPage.tsx";
 
 const router = createBrowserRouter([
   {
@@ -49,7 +49,7 @@ const router = createBrowserRouter([
         children: [
           {
             path: "/account/info",
-            element: <AccountPage />,
+            element: <AccountInfoPage />,
           },
           {
             path: "/account/profile",

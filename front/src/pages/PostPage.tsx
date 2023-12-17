@@ -7,12 +7,12 @@ import { IoIosArrowBack } from "react-icons/io";
 import { TbArrowsDownUp } from "react-icons/tb";
 import { FaHeart } from "react-icons/fa";
 
-import Modal from "../../components/Modal";
-import { useAppDispatch, useAppSelector } from "../../store";
+import Modal from "../components/Modal";
+import { useAppDispatch, useAppSelector } from "../store";
 
 import TextareaAutosize from "react-textarea-autosize";
-import { getUser } from "../../store/user/userThunkFunction";
-import Content from "../../components/Post/Content";
+import { getUser } from "../store/user/userThunkFunction";
+import Content from "../components/Post/Content";
 
 interface Post {
   _id: string;

@@ -1,9 +1,9 @@
 import { IoIosArrowForward } from "react-icons/io";
-import { useAppSelector } from "../../store";
-import Header from "../../components/Account/Header";
+import { useAppSelector } from "../store";
+import Header from "../components/Account/Header";
 import { Link } from "react-router-dom";
 
-const AccountPage = () => {
+const AccountInfoPage = () => {
   const { currentUser } = useAppSelector((state) => state.user);
 
   return (
@@ -55,4 +55,4 @@ const AccountPage = () => {
   );
 };
 
-export default AccountPage;
+export default AccountInfoPage;

@@ -1,9 +1,9 @@
-import { useAppSelector, useAppDispatch } from "../../store";
+import { useAppSelector, useAppDispatch } from "../store";
 import { useParams } from "react-router-dom";
-import { getPost } from "../../store/write/writeThunkFunction";
+import { getPost } from "../store/write/writeThunkFunction";
 
-import Editor from "../../components/Write/Editor";
-import PublishForm from "../../components/Write/PublishForm";
+import Editor from "../components/Write/Editor";
+import PublishForm from "../components/Write/PublishForm";
 import { useEffect } from "react";
 
 const WritePage = () => {

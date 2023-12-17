@@ -1,8 +1,8 @@
-import Header from "../../components/Account/Header";
+import Header from "../components/Account/Header";
 import { FaCheckCircle } from "react-icons/fa";
 import { useState } from "react";
-import { useAppDispatch, useAppSelector } from "../../store";
-import { deleteUser } from "../../store/user/userThunkFunction";
+import { useAppDispatch, useAppSelector } from "../store";
+import { deleteUser } from "../store/user/userThunkFunction";
 
 const AccountUnRegisterPage = () => {
   const [confirm, setConfirm] = useState<boolean>(true);

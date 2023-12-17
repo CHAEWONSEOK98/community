@@ -1,7 +1,7 @@
 import axios from "axios";
-import PostListLayout from "../../components/Layout/PostListLayout";
-import PostCard from "../../components/PostCard";
-import { useAppSelector } from "../../store";
+import PostListLayout from "../components/Layout/PostListLayout";
+import PostCard from "../components/PostCard";
+import { useAppSelector } from "../store";
 import { useEffect, useState } from "react";
 
 const MyLikePostListPage = () => {

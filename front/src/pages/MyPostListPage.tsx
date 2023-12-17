@@ -1,8 +1,8 @@
-import PostListLayout from "../../components/Layout/PostListLayout";
+import PostListLayout from "../components/Layout/PostListLayout";
 import axios from "axios";
-import { useAppSelector } from "../../store";
+import { useAppSelector } from "../store";
 import { useEffect, useState } from "react";
-import PostCard from "../../components/PostCard";
+import PostCard from "../components/PostCard";
 import toast, { Toaster } from "react-hot-toast";
 import { TbArrowsDownUp } from "react-icons/tb";
 

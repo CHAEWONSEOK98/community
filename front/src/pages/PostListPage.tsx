@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import PostListLayout from "../../components/Layout/PostListLayout";
-import PostCard from "../../components/PostCard";
+import PostListLayout from "../components/Layout/PostListLayout";
+import PostCard from "../components/PostCard";
 
 interface Posts {
   _id: string;
