@@ -39,9 +39,11 @@ const userSlice = createSlice({
     builder.addCase(
       logInUser.fulfilled,
       (state, action: PayloadAction<CurrentUser>) => {
-        state.currentUser = action.payload;
+        state.currentUser = action.payload.rest;
         state.loading = false;
         state.error = false;
+        localStorage.setItem("accessToken", action.payload.accessToken);
+        localStorage.setItem("refreshToken", action.payload.refreshToken);
       },
     );
     builder.addCase(logInUser.rejected, (state, action) => {
@@ -56,6 +58,7 @@ const userSlice = createSlice({
       state.currentUser = null;
       state.loading = false;
       state.error = false;
+      localStorage.clear();
     });
     builder.addCase(logOutUser.rejected, (state, action) => {
       state.loading = false;

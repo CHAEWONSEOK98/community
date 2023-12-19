@@ -135,7 +135,7 @@ postRouter.get('/:postId', async (req, res) => {
 });
 
 // 게시글 내역 공개 get
-postRouter.post('/my/post-list/public', async (req, res, next) => {
+postRouter.post('/my/post-list/public', verifyToken, async (req, res, next) => {
   try {
     const { userId } = req.body;
     const { lastId } = req.query;
@@ -167,38 +167,42 @@ postRouter.post('/my/post-list/public', async (req, res, next) => {
 });
 
 // 게시글 내역 비공개 get
-postRouter.post('/my/post-list/private', async (req, res, next) => {
-  try {
-    const { userId } = req.body;
-    const { lastId } = req.query;
+postRouter.post(
+  '/my/post-list/private',
+  verifyToken,
+  async (req, res, next) => {
+    try {
+      const { userId } = req.body;
+      const { lastId } = req.query;
 
-    if (userId && !mongoose.isValidObjectId(userId)) {
-      throw new Error('invalid userId');
+      if (userId && !mongoose.isValidObjectId(userId)) {
+        throw new Error('invalid userId');
+      }
+      if (lastId && !mongoose.isValidObjectId(lastId)) {
+        throw new Error('invalid lastId');
+      }
+
+      const posts = await Post.find(
+        lastId
+          ? {
+              user: userId,
+              draft: false,
+              isPublic: false,
+              _id: { $lt: lastId },
+            }
+          : { user: userId, draft: false, isPublic: false }
+      )
+        .limit(8)
+        .sort({ _id: -1 });
+
+      return res.status(200).json(posts);
+    } catch (error) {
+      next(error);
     }
-    if (lastId && !mongoose.isValidObjectId(lastId)) {
-      throw new Error('invalid lastId');
-    }
-
-    const posts = await Post.find(
-      lastId
-        ? {
-            user: userId,
-            draft: false,
-            isPublic: false,
-            _id: { $lt: lastId },
-          }
-        : { user: userId, draft: false, isPublic: false }
-    )
-      .limit(8)
-      .sort({ _id: -1 });
-
-    return res.status(200).json(posts);
-  } catch (error) {
-    next(error);
   }
-});
+);
 
-postRouter.post('/my/liked-posts', async (req, res, next) => {
+postRouter.post('/my/liked-posts', verifyToken, async (req, res, next) => {
   try {
     const { likes } = req.body;
     const posts = await Post.find({ _id: likes });
@@ -219,7 +223,7 @@ postRouter.get('/my/save-post', async (req, res) => {
   }
 });
 
-postRouter.put('/:postId', async (req, res) => {
+postRouter.put('/:postId', verifyToken, async (req, res) => {
   try {
     const { postId } = req.params;
     const { updateTitle, updateContent } = req.body;
@@ -236,7 +240,7 @@ postRouter.put('/:postId', async (req, res) => {
   }
 });
 
-postRouter.delete('/:postId', async (req, res) => {
+postRouter.delete('/:postId', verifyToken, async (req, res) => {
   try {
     const { postId } = req.params;
 
@@ -255,7 +259,7 @@ postRouter.delete('/:postId', async (req, res) => {
   }
 });
 
-postRouter.delete('/my/save-post/', async (req, res) => {
+postRouter.delete('/my/save-post/', verifyToken, async (req, res) => {
   try {
     let { postId } = req.body;
 
@@ -267,7 +271,7 @@ postRouter.delete('/my/save-post/', async (req, res) => {
   }
 });
 
-postRouter.patch('/:postId/like', async (req, res) => {
+postRouter.patch('/:postId/like', verifyToken, async (req, res) => {
   try {
     const { postId } = req.params;
     const { userId } = req.body;
@@ -297,7 +301,7 @@ postRouter.patch('/:postId/like', async (req, res) => {
   }
 });
 
-postRouter.patch('/:postId/unlike', async (req, res) => {
+postRouter.patch('/:postId/unlike', verifyToken, async (req, res) => {
   try {
     const { postId } = req.params;
     const { userId } = req.body;

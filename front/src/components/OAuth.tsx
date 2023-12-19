@@ -7,6 +7,7 @@ import { logInUser } from "../store/user/userThunkFunction";
 const OAuth = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+
   const handleGoogleClick = async () => {
     const provider = new GoogleAuthProvider();
     const auth = getAuth(app);

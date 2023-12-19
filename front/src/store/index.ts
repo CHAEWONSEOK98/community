@@ -1,6 +1,7 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { persistReducer, persistStore } from "redux-persist";
-import storage from "redux-persist/lib/storage";
+// import storage from "redux-persist/lib/storage";
+import storageSession from "redux-persist/lib/storage/session";
 import { useDispatch, useSelector } from "react-redux";
 import type { TypedUseSelectorHook } from "react-redux";
 import userReducer from "./user/userSlice";
@@ -14,7 +15,7 @@ const rootReducer = combineReducers({
 const persistConfig = {
   key: "root",
   version: 1,
-  storage,
+  storage: storageSession,
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

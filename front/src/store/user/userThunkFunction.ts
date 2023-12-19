@@ -10,7 +10,6 @@ export const logInUser = createAsyncThunk(
         formData,
         { withCredentials: true },
       );
-      console.log(response.data);
       return response.data;
     } catch (error) {
       console.log(error);

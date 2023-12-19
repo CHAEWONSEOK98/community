@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import PostCard from "../components/PostCard";
 import toast, { Toaster } from "react-hot-toast";
 import { TbArrowsDownUp } from "react-icons/tb";
+import axiosInstance from "../utils/axios";
 
 const MyPostListPage = () => {
   const { currentUser } = useAppSelector((state) => state.user);
@@ -26,9 +27,13 @@ const MyPostListPage = () => {
     setLoading(true);
     (async () => {
       try {
-        const { data } = await axios.post(`${publicPostsUrl}`, {
-          userId: currentUser._id,
-        });
+        const { data } = await axiosInstance.post(
+          `${publicPostsUrl}`,
+          {
+            userId: currentUser._id,
+          },
+          { withCredentials: true },
+        );
         setPublicPosts((prev) => [...prev, ...data]);
       } catch (error) {
         console.log(error);
@@ -43,7 +48,7 @@ const MyPostListPage = () => {
     setLoading(true);
     (async () => {
       try {
-        const { data } = await axios.post(`${privatePostsUrl}`, {
+        const { data } = await axiosInstance.post(`${privatePostsUrl}`, {
           userId: currentUser._id,
         });
 

@@ -14,10 +14,30 @@ authRouter.post('/register', async (req, res, next) => {
     await newUser.save();
     res.status(201).json({ message: 'User created successfully' });
   } catch (error) {
-    // res.status(500).json(error.message);
-    // next(errorHanlder(300, 'something went wrong'));
     next(error);
   }
+});
+
+authRouter.post('/refresh', (req, res, next) => {
+  const refreshToken = req.body.token;
+
+  if (!refreshToken) return res.status(400).json('Refresh Token이 없습니다.');
+
+  jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET, (error, user) => {
+    error && next(error);
+
+    const newAccessToken = jwt.sign(
+      { id: user.id },
+      process.env.JWT_ACCESS_SECRET,
+      {
+        expiresIn: '10m',
+      }
+    );
+
+    res.status(200).json({
+      accessToken: newAccessToken,
+    });
+  });
 });
 
 authRouter.post('/login', async (req, res, next) => {
@@ -29,12 +49,22 @@ authRouter.post('/login', async (req, res, next) => {
     if (!validPassword) return next(errorHanlder(401, 'wrong credentials'));
     const { password: hashedPassword, ...rest } = validUser._doc;
 
-    const token = jwt.sign({ id: validUser._id }, process.env.JWT_SECRET);
-    const expiryDate = new Date(Date.now() + 86400e3);
-    res
-      .cookie('access_token', token, { httpOnly: true, expires: expiryDate })
-      .status(200)
-      .json(rest);
+    const accessToken = jwt.sign(
+      { id: validUser._id },
+      process.env.JWT_ACCESS_SECRET,
+      {
+        expiresIn: '10m',
+      }
+    );
+    const refreshToken = jwt.sign(
+      { id: validUser._id },
+      process.env.JWT_REFRESH_SECRET,
+      {
+        expiresIn: '24h',
+      }
+    );
+
+    res.status(200).json({ rest, accessToken, refreshToken });
   } catch (error) {
     next(error);
   }
