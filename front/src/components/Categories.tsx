@@ -1,9 +1,22 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 import Modal from "./Modal/Modal";
+import { useAppDispatch, useAppSelector } from "../store";
+import { getCategories } from "../store/category/categoryThunkFunction";
 
 const Categories = () => {
+  const { categories } = useAppSelector((state) => state.category);
+  console.log(categories);
   const [addCategoriesModal, setAddCategoriesModal] = useState<boolean>(false);
+
+  const dispatch = useAppDispatch();
+  const location = useLocation();
+  const locationSplit = location.pathname.split("/");
+  const loactionLastValue = locationSplit[locationSplit.length - 1];
+
+  useEffect(() => {
+    dispatch(getCategories());
+  }, []);
 
   const handleAddCategory = () => {
     setAddCategoriesModal(true);
@@ -18,49 +31,36 @@ const Categories = () => {
         >
           +
         </li>
-        <li className="inline-flex h-9 cursor-pointer  items-center rounded-3xl border border-solid bg-[#F2F2F2] p-4 text-sm">
-          All
-        </li>
-        <Link to={`/category/react`}>
-          <li className="inline-flex h-9 cursor-pointer  items-center rounded-3xl border border-solid bg-[#F2F2F2] p-4 text-sm">
-            React
+        <Link to={`/`}>
+          <li
+            className={`inline-flex h-9 cursor-pointer  items-center rounded-3xl border border-solid bg-[#F2F2F2] p-4 text-sm ${
+              location.pathname === "/" ? "border-2 border-black" : ""
+            }`}
+          >
+            All
           </li>
         </Link>
+        {categories &&
+          categories.map((category) => (
+            <Link to={`/category/${category.categoryName}`} key={category._id}>
+              <li
+                className={`${
+                  loactionLastValue === category.categoryName
+                    ? "border-2 border-black"
+                    : ""
+                } inline-flex h-9 cursor-pointer  items-center rounded-3xl border border-solid bg-[#F2F2F2] p-4 text-sm`}
+              >
+                {category.categoryName}
+              </li>
+            </Link>
+          ))}
       </ul>
 
-      {addCategoriesModal && <Modal setAddCategoriesModal={setAddCategoriesModal} />}
+      {addCategoriesModal && (
+        <Modal setAddCategoriesModal={setAddCategoriesModal} />
+      )}
     </div>
   );
 };
 
 export default Categories;
-
-{
-  /* <li className="inline-flex h-9 cursor-pointer  items-center rounded-3xl border border-solid bg-[#F2F2F2] p-4 text-sm">
-All
-</li>
-<li className="inline-flex h-9 cursor-pointer  items-center rounded-3xl border border-solid bg-[#F2F2F2] p-4 text-sm">
-Frontend
-</li>
-<li className="inline-flex h-9 cursor-pointer  items-center rounded-3xl border border-solid bg-[#F2F2F2] p-4 text-sm">
-JavaScript
-</li>
-<li className="inline-flex h-9 cursor-pointer  items-center rounded-3xl border border-solid bg-[#F2F2F2] p-4 text-sm">
-TypeScript
-</li>
-<li className="inline-flex h-9 cursor-pointer  items-center rounded-3xl border border-solid bg-[#F2F2F2] p-4 text-sm">
-React
-</li>
-<li className="inline-flex h-9 cursor-pointer  items-center rounded-3xl border border-solid bg-[#F2F2F2] p-4 text-sm">
-Next.js
-</li>
-<li className="inline-flex h-9 cursor-pointer  items-center rounded-3xl border border-solid bg-[#F2F2F2] p-4 text-sm">
-Redux
-</li>
-<li className="inline-flex h-9 cursor-pointer  items-center rounded-3xl border border-solid bg-[#F2F2F2] p-4 text-sm">
-Recoil
-</li>
-<li className="inline-flex h-9 cursor-pointer  items-center rounded-3xl border border-solid bg-[#F2F2F2] p-4 text-sm">
-React Query
-</li> */
-}

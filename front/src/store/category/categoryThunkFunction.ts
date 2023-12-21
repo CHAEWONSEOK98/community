@@ -9,7 +9,21 @@ export const postCategory = createAsyncThunk(
         `${import.meta.env.VITE_SERVER_DOMAIN}/category`,
         { categoryName },
       );
-      console.log(data);
+      return data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data || error.message);
+    }
+  },
+);
+
+export const getCategories = createAsyncThunk(
+  "category/getCategories",
+  async (_, thunkAPI) => {
+    try {
+      let { data } = await axiosInstance.get(
+        `${import.meta.env.VITE_SERVER_DOMAIN}/category`,
+      );
+      return data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data || error.message);
     }

@@ -8,10 +8,18 @@ categoryRouter.post('/', verifyToken, async (req, res, next) => {
   let { categoryName } = req.body;
 
   try {
-    const category = await new Category({ category: categoryName }).save();
+    const category = await new Category({ categoryName: categoryName }).save();
     res.status(200).json(category);
   } catch (error) {
-    console.log('여기로 넘어온거?');
+    next(error);
+  }
+});
+
+categoryRouter.get('/', verifyToken, async (req, res, next) => {
+  try {
+    const categories = await Category.find();
+    res.json(categories);
+  } catch (error) {
     next(error);
   }
 });
