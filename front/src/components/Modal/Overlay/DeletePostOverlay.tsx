@@ -1,16 +1,16 @@
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 
-interface ModalOverlayProps {
-  setModal: boolean;
+interface DeletePostOverlayProps {
+  setDeletePostModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const ModalOverlay = ({ setModal }: ModalOverlayProps) => {
+const DeletePostOverlay = ({ setDeletePostModal }: DeletePostOverlayProps) => {
   const { postId } = useParams();
   const navigate = useNavigate();
 
   const handleCancel = () => {
-    setModal(false);
+    setDeletePostModal(false);
   };
   const handleDelete = async () => {
     try {
@@ -20,7 +20,7 @@ const ModalOverlay = ({ setModal }: ModalOverlayProps) => {
       console.log(error);
       throw new Error("게시글 삭제 실패");
     } finally {
-      setModal(false);
+      setDeletePostModal(false);
     }
   };
   return (
@@ -35,4 +35,4 @@ const ModalOverlay = ({ setModal }: ModalOverlayProps) => {
   );
 };
 
-export default ModalOverlay;
+export default DeletePostOverlay;

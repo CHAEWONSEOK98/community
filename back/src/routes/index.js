@@ -4,4 +4,5 @@ module.exports = {
   ...require('./postRoute'),
   ...require('./commentRoute'),
   ...require('./imageRoute'),
+  ...require('./categoryRoute'),
 };

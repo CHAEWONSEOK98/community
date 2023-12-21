@@ -7,7 +7,7 @@ import { IoIosArrowBack } from "react-icons/io";
 import { TbArrowsDownUp } from "react-icons/tb";
 import { FaHeart } from "react-icons/fa";
 
-import Modal from "../components/Modal";
+import Modal from "../components/Modal/Modal";
 import { useAppDispatch, useAppSelector } from "../store";
 
 import TextareaAutosize from "react-textarea-autosize";
@@ -29,7 +29,7 @@ const PostPage = () => {
   const [post, setPost] = useState<Post>([]);
   const [commentValue, setCommentValue] = useState<string>("");
   const [comments, setComments] = useState<string[]>([]);
-  const [modal, setModal] = useState<boolean>(false);
+  const [deletePostModal, setDeletePostModal] = useState<boolean>(false);
   const [toggle, setToggle] = useState<boolean>(false);
   const [likeToggle, setLikeToggle] = useState<boolean>(false);
 
@@ -65,7 +65,7 @@ const PostPage = () => {
   }, []);
 
   const handleDelete = () => {
-    setModal(true);
+    setDeletePostModal(true);
   };
 
   const handleToggle = () => {
@@ -162,7 +162,7 @@ const PostPage = () => {
   return (
     <div className="mx-auto mt-10  flex  max-w-4xl flex-col  justify-between  px-4">
       <div>
-        {modal && <Modal setModal={setModal} />}
+        {deletePostModal && <Modal setDeletePostModal={setDeletePostModal} />}
 
         {post &&
           post.map((element: Post) => {

@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import Categories from "../components/Categories";
 
 interface Posts {
   createdAt: string;
@@ -52,39 +53,7 @@ const HomePage = () => {
 
   return (
     <div className=" mb-4 px-4  lg:flex lg:px-0">
-      <div className="order-2 mx-auto  pt-6 md:w-[675px]  lg:sticky lg:top-24 lg:mx-0 lg:ml-auto lg:h-96 lg:w-[22rem]">
-        <p className="mb-3 text-sm font-bold">CATEGORY</p>
-        <ul className="flex flex-wrap gap-2">
-          <li className="inline-flex h-9 cursor-pointer  items-center rounded-3xl border border-solid bg-[#F2F2F2] p-4 text-sm">
-            All
-          </li>
-          <li className="inline-flex h-9 cursor-pointer  items-center rounded-3xl border border-solid bg-[#F2F2F2] p-4 text-sm">
-            Frontend
-          </li>
-          <li className="inline-flex h-9 cursor-pointer  items-center rounded-3xl border border-solid bg-[#F2F2F2] p-4 text-sm">
-            JavaScript
-          </li>
-          <li className="inline-flex h-9 cursor-pointer  items-center rounded-3xl border border-solid bg-[#F2F2F2] p-4 text-sm">
-            TypeScript
-          </li>
-          <li className="inline-flex h-9 cursor-pointer  items-center rounded-3xl border border-solid bg-[#F2F2F2] p-4 text-sm">
-            React
-          </li>
-          <li className="inline-flex h-9 cursor-pointer  items-center rounded-3xl border border-solid bg-[#F2F2F2] p-4 text-sm">
-            Next.js
-          </li>
-          <li className="inline-flex h-9 cursor-pointer  items-center rounded-3xl border border-solid bg-[#F2F2F2] p-4 text-sm">
-            Redux
-          </li>
-          <li className="inline-flex h-9 cursor-pointer  items-center rounded-3xl border border-solid bg-[#F2F2F2] p-4 text-sm">
-            Recoil
-          </li>
-          <li className="inline-flex h-9 cursor-pointer  items-center rounded-3xl border border-solid bg-[#F2F2F2] p-4 text-sm">
-            React Query
-          </li>
-        </ul>
-      </div>
-
+      <Categories />
       <div className="mx-auto md:w-[675px]  lg:mx-0  xl:w-[700px]">
         {posts.map((post, index) => (
           <Link

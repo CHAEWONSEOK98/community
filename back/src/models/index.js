@@ -3,4 +3,5 @@ module.exports = {
   ...require('./Post'),
   ...require('./Comment'),
   ...require('./Image'),
+  ...require('./Category'),
 };

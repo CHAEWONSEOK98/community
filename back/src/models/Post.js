@@ -24,6 +24,9 @@ const PostSchema = new Schema({
     type: Boolean,
     default: false,
   },
+  category: {
+    type: String,
+  },
   user: { type: Types.ObjectId, required: true, ref: 'user' },
   username: { type: String, required: true },
   likes: [{ type: Types.ObjectId }],
