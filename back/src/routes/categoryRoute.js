@@ -24,4 +24,17 @@ categoryRouter.get('/', verifyToken, async (req, res, next) => {
   }
 });
 
+categoryRouter.delete('/', verifyToken, async (req, res, next) => {
+  try {
+    const { categoryName } = req.body;
+    const category = await Category.findOneAndDelete({
+      categoryName: categoryName,
+    });
+
+    res.json(category);
+  } catch (error) {
+    next(error);
+  }
+});
+
 module.exports = { categoryRouter };

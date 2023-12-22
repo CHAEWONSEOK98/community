@@ -1,16 +1,22 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getCategories, postCategory } from "./categoryThunkFunction";
+import {
+  deleteCategory,
+  getCategories,
+  postCategory,
+} from "./categoryThunkFunction";
 
 interface initialState {
-  category: string;
+  categories: string[];
   loading: boolean;
   error: string | string[];
+  trigger: boolean;
 }
 
-const initialState = {
+const initialState: initialState = {
   categories: [],
   loading: false,
   error: "",
+  trigger: false,
 };
 
 const categorySlice = createSlice({
@@ -38,6 +44,18 @@ const categorySlice = createSlice({
       state.loading = false;
     });
     builder.addCase(getCategories.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    });
+
+    builder.addCase(deleteCategory.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(deleteCategory.fulfilled, (state) => {
+      state.loading = false;
+      state.trigger = !state.trigger;
+    });
+    builder.addCase(deleteCategory.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload;
     });
