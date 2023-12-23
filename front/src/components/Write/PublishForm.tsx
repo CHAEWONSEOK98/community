@@ -8,11 +8,21 @@ import Des from "./Des";
 import IsPublic from "./IsPublic";
 import Tags from "./Tags";
 import { Toaster, toast } from "react-hot-toast";
+import axiosInstance from "../../utils/axios.js";
 
 const PublishForm = () => {
   const { currentUser } = useAppSelector((state) => state.user);
-  const { title, content, thumbnail, des, tags, isPublic, draft, editorState } =
-    useAppSelector((state) => state.write);
+  const {
+    category,
+    title,
+    content,
+    thumbnail,
+    des,
+    tags,
+    isPublic,
+    draft,
+    editorState,
+  } = useAppSelector((state) => state.write);
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -26,6 +36,7 @@ const PublishForm = () => {
     event.preventDefault();
 
     let postObject = {
+      category,
       title,
       content,
       thumbnail,
@@ -39,7 +50,7 @@ const PublishForm = () => {
       postId,
     };
 
-    axios
+    axiosInstance
       .post(`${import.meta.env.VITE_SERVER_DOMAIN}/post`, postObject, {
         withCredentials: true,
       })

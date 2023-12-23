@@ -4,6 +4,7 @@ import toast from "react-hot-toast";
 
 interface InitialState {
   editorState: string;
+  category: string;
   title: string;
   content: any[];
   thumbnail: string;
@@ -18,6 +19,7 @@ interface InitialState {
 
 const initialState: InitialState = {
   editorState: "editor",
+  category: "",
   title: "",
   content: [],
   thumbnail: "",
@@ -36,6 +38,10 @@ const writeSlice = createSlice({
   reducers: {
     editorStateToggle: (state, action: PayloadAction<string>) => {
       state.editorState = action.payload;
+    },
+
+    setCategory: (state, action: PayloadAction<string>) => {
+      state.category = action.payload;
     },
 
     setTitle: (state, action: PayloadAction<string>) => {
@@ -72,6 +78,7 @@ const writeSlice = createSlice({
 
     reset: (state) => {
       (state.editorState = "editor"),
+        (state.category = ""),
         (state.title = ""),
         (state.content = []),
         (state.thumbnail = ""),
@@ -107,6 +114,7 @@ const writeSlice = createSlice({
 
 export const {
   editorStateToggle,
+  setCategory,
   setTitle,
   setContent,
   setThumbnail,

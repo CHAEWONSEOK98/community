@@ -12,11 +12,23 @@ import {
 import Title from "./Title";
 import { Toaster, toast } from "react-hot-toast";
 import axios from "axios";
+import Category from "./Category";
+import axiosInstance from "../../utils/axios.js";
 
 const Editor = ({ postId }: string) => {
   const { currentUser } = useAppSelector((state) => state.user);
-  const { title, content, thumbnail, des, tags, isPublic, draft, editorState } =
-    useAppSelector((state) => state.write);
+  const {
+    category,
+    title,
+    content,
+    thumbnail,
+    des,
+    tags,
+    isPublic,
+    draft,
+    editorState,
+  } = useAppSelector((state) => state.write);
+
   const [editor, setEditor] = useState({ isReady: false });
   const [disable, setDisable] = useState<boolean>(false);
 
@@ -56,6 +68,7 @@ const Editor = ({ postId }: string) => {
       editor.save().then((data) => {
         dispatch(setContent(data));
         let postObject = {
+          category,
           title,
           content: data,
           thumbnail,
@@ -69,7 +82,7 @@ const Editor = ({ postId }: string) => {
           postId,
         };
 
-        axios
+        axiosInstance
           .post(`${import.meta.env.VITE_SERVER_DOMAIN}/post`, postObject, {
             withCredentials: true,
           })
@@ -119,6 +132,10 @@ const Editor = ({ postId }: string) => {
   return (
     <div className="relative mx-auto  h-screen  w-full  max-w-4xl">
       <Toaster position="top-center" toastOptions={{ duration: 900 }} />
+
+      <section className="px-2">
+        <Category />
+      </section>
 
       <section className="editor-height">
         <Title editorState={editorState} />

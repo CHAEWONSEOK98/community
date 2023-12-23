@@ -16,6 +16,7 @@ postRouter.use('/:postId/comment', commentRouter);
 postRouter.post('/', verifyToken, async (req, res, next) => {
   try {
     let {
+      category,
       title,
       content,
       thumbnail,
@@ -33,6 +34,9 @@ postRouter.post('/', verifyToken, async (req, res, next) => {
       return next(errorHanlder(400, 'title error'));
     }
     if (!draft) {
+      if (typeof category !== 'string') {
+        return next(errorHanlder(400, 'category error'));
+      }
       if (!content.blocks.length) {
         return next(errorHanlder(400, 'content is required'));
       }
@@ -63,16 +67,26 @@ postRouter.post('/', verifyToken, async (req, res, next) => {
       if (postId) {
         await Post.findOneAndUpdate(
           { _id: postId },
-          { title, content, draft: false, thumbnail, des, isPublic, tags }
+          {
+            category,
+            title,
+            content,
+            draft: false,
+            thumbnail,
+            des,
+            isPublic,
+            tags,
+          }
         );
 
         return res.status(201).json('등록 완료');
       }
     } else {
+      // 기존의 게시글 업데이트
       if (postId) {
         await Post.findOneAndUpdate(
           { _id: postId },
-          { title, content, draft, thumbnail, des, isPublic, tags }
+          { category, title, content, draft, thumbnail, des, isPublic, tags }
         );
 
         return res.status(201).json('수정 완료');
@@ -83,6 +97,7 @@ postRouter.post('/', verifyToken, async (req, res, next) => {
     if (!user) return next(errorHanlder(400, 'user does not exist'));
 
     let post = new Post({
+      category,
       title,
       content,
       draft,

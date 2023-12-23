@@ -6,14 +6,21 @@ import {
 } from "./categoryThunkFunction";
 
 interface initialState {
-  categories: string[];
+  categories: [
+    {
+      _id: string;
+      categoryName: string;
+      createdAt: string;
+      __v: number;
+    },
+  ];
   loading: boolean;
   error: string | string[];
   trigger: boolean;
 }
 
 const initialState: initialState = {
-  categories: [],
+  categories: [{}],
   loading: false,
   error: "",
   trigger: false,

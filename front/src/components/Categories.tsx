@@ -17,7 +17,6 @@ const Categories = () => {
   const loactionLastValue = locationSplit[locationSplit.length - 1];
 
   useEffect(() => {
-    console.log(trigger);
     dispatch(getCategories());
   }, [trigger]);
 
