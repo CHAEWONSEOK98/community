@@ -8,115 +8,14 @@ const { isValidObjectId, default: mongoose } = require('mongoose');
 const { verifyToken } = require('../middleware/verifyToken');
 
 const { commentRouter } = require('./commentRoute');
-const { getCategory } = require('../controllers/post');
+const { createOrUpdatePost, getCategory } = require('../controllers/post');
 
 // Comment
 // '/post/:postId/comment'
 postRouter.use('/:postId/comment', commentRouter);
 
-postRouter.post('/', verifyToken, async (req, res, next) => {
-  try {
-    let {
-      category,
-      title,
-      content,
-      thumbnail,
-      des,
-      tags,
-      isPublic,
-      draft,
-      userId,
-      username,
-
-      postId,
-    } = req.body;
-
-    if (!title.length || typeof title !== 'string') {
-      return next(errorHanlder(400, 'title error'));
-    }
-    if (!draft) {
-      if (typeof category !== 'string') {
-        return next(errorHanlder(400, 'category error'));
-      }
-      if (!content.blocks.length) {
-        return next(errorHanlder(400, 'content is required'));
-      }
-      if ((thumbnail && !thumbnail.length) || typeof thumbnail !== 'string') {
-        return next(errorHanlder(400, 'thumbnail error'));
-      }
-      if ((des && des.length > 200) || typeof des !== 'string') {
-        return next(errorHanlder(400, 'des error'));
-      }
-      if (typeof isPublic !== 'boolean') {
-        return next(errorHanlder(400, 'isPublic error'));
-      }
-      if (typeof draft !== 'boolean') {
-        return next(errorHanlder(400, 'draft error'));
-      }
-      if (!isValidObjectId(userId)) {
-        return next(errorHanlder(400, 'userId is invalid'));
-      }
-      if (!username.length || typeof username !== 'string') {
-        return next(errorHanlder(400, 'username error'));
-      }
-    }
-
-    tags = tags.map((tag) => tag.toLowerCase());
-
-    if (draft) {
-      // 임시 저장 한 글 업데이트
-      if (postId) {
-        await Post.findOneAndUpdate(
-          { _id: postId },
-          {
-            category,
-            title,
-            content,
-            draft: false,
-            thumbnail,
-            des,
-            isPublic,
-            tags,
-          }
-        );
-
-        return res.status(201).json('등록 완료');
-      }
-    } else {
-      // 기존의 게시글 업데이트
-      if (postId) {
-        await Post.findOneAndUpdate(
-          { _id: postId },
-          { category, title, content, draft, thumbnail, des, isPublic, tags }
-        );
-
-        return res.status(201).json('수정 완료');
-      }
-    }
-
-    let user = await User.findOne({ _id: userId });
-    if (!user) return next(errorHanlder(400, 'user does not exist'));
-
-    let post = new Post({
-      category,
-      title,
-      content,
-      draft,
-      thumbnail,
-      des,
-      isPublic,
-      tags,
-      user,
-      username,
-    });
-    await post.save();
-
-    return res.status(201).json(post);
-  } catch (error) {
-    console.log(error);
-    res.status(500).send({ error: error.message });
-  }
-});
+// 게시글 생성 및 수정
+postRouter.post('/', verifyToken, createOrUpdatePost);
 
 // 게시글 카테고리로 분류하여 불러오기
 postRouter.post('/category', getCategory);

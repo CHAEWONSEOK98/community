@@ -21,6 +21,7 @@ interface Posts {
 
 const HomePage = () => {
   const [posts, setPosts] = useState<Posts>([]);
+  console.log(posts);
   const [postsUrl, setPostsUrl] = useState(
     `http://localhost:3000/post/category`,
   );
