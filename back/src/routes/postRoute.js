@@ -8,6 +8,7 @@ const { isValidObjectId, default: mongoose } = require('mongoose');
 const { verifyToken } = require('../middleware/verifyToken');
 
 const { commentRouter } = require('./commentRoute');
+const { getCategory } = require('../controllers/post');
 
 // Comment
 // '/post/:postId/comment'
@@ -118,46 +119,7 @@ postRouter.post('/', verifyToken, async (req, res, next) => {
 });
 
 // 게시글 카테고리로 분류하여 불러오기
-postRouter.post('/category', async (req, res) => {
-  try {
-    const { lastId } = req.query;
-    const { categoryState } = req.body;
-
-    if (lastId && !mongoose.isValidObjectId(lastId)) {
-      throw new Error('invalid lastId');
-    }
-
-    if (categoryState === 'All') {
-      let posts = await Post.find(
-        lastId
-          ? { draft: false, isPublic: true, _id: { $lt: lastId } }
-          : { draft: false, isPublic: true }
-      )
-        .sort({ _id: -1 })
-        .select('title createdAt des tags username')
-        .limit(10);
-      return res.send({ posts });
-    } else {
-      let posts = await Post.find(
-        lastId
-          ? {
-              category: categoryState,
-              draft: false,
-              isPublic: true,
-              _id: { $lt: lastId },
-            }
-          : { category: categoryState, draft: false, isPublic: true }
-      )
-        .sort({ _id: -1 })
-        .select('title createdAt des tags username')
-        .limit(10);
-      return res.send({ posts });
-    }
-  } catch (error) {
-    console.log(error);
-    res.status(500).send({ error: error.message });
-  }
-});
+postRouter.post('/category', getCategory);
 
 postRouter.get('/:postId', async (req, res) => {
   try {
