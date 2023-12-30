@@ -4,9 +4,9 @@ import { HiOutlinePencilSquare } from "react-icons/hi2";
 
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import { useAppDispatch, useAppSelector } from "../store";
+import { useAppDispatch, useAppSelector } from "../../store";
 import UserNavigationPanel from "./UserNavigationPanel";
-import { reset } from "../store/write/writeSlice";
+import { reset } from "../../store/write/writeSlice";
 
 const Header = () => {
   const { currentUser } = useAppSelector((state) => state.user);
@@ -30,7 +30,7 @@ const Header = () => {
   };
 
   return (
-    <header className="sticky top-0 z-10 flex h-16 w-full items-center justify-between border-b-[1px] border-black bg-white px-4 lg:px-0">
+    <header className="sticky top-0 z-10 flex h-16 w-full items-center justify-between border-b-[1px] bg-white px-4 xl:px-0">
       <div className="flex w-full items-center">
         <Link to={`/`} className="pb-1">
           <p className=" text-xl font-bold">Community</p>

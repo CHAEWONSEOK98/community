@@ -4,8 +4,8 @@ import { MdOutlineLibraryBooks } from "react-icons/md";
 import { AiOutlineComment } from "react-icons/ai";
 import { AiOutlineLike } from "react-icons/ai";
 import { CiSaveDown2 } from "react-icons/ci";
-import { useAppSelector, useAppDispatch } from "../store";
-import { logOutUser } from "../store/user/userThunkFunction";
+import { useAppSelector, useAppDispatch } from "../../store";
+import { logOutUser } from "../../store/user/userThunkFunction";
 import { Link } from "react-router-dom";
 
 const UserNavigationPanel = () => {

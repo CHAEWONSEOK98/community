@@ -11,7 +11,6 @@ import AccountInfoPage from "./pages/AccountInfoPage.tsx";
 import AccountProfilePage from "./pages/AccountProfilePage.tsx";
 import AccountUnRegisterPage from "./pages/AccountUnRegisterPage.tsx";
 
-import CategoryPage from "./pages/CategoryPage.tsx";
 import PostListPage from "./pages/PostListPage.tsx";
 import PostPage from "./pages/PostPage.tsx";
 
@@ -36,10 +35,6 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <Home />,
-      },
-      {
-        path: "/category/:name",
-        element: <CategoryPage />,
       },
       {
         path: "/post-list",
