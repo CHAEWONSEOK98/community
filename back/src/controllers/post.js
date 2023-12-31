@@ -119,7 +119,7 @@ const getCategory = async (req, res) => {
       )
         .populate('author', 'username profilePicture')
         .sort({ _id: -1 })
-        .select('title createdAt des tags username')
+        .select('title createdAt des tags thumbnail category username')
         .limit(10);
       return res.send({ posts });
     } else {
@@ -135,7 +135,7 @@ const getCategory = async (req, res) => {
       )
         .populate('author', 'username profilePicture')
         .sort({ _id: -1 })
-        .select('title createdAt des tags username')
+        .select('title createdAt des tags thumbnail category username')
         .limit(10);
       return res.send({ posts });
     }
