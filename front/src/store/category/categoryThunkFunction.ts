@@ -1,5 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axiosInstance from "../../utils/axios.js";
+import axios from "axios";
 
 export const postCategory = createAsyncThunk(
   "category/postCategory",
@@ -20,7 +21,7 @@ export const getCategories = createAsyncThunk(
   "category/getCategories",
   async (_, thunkAPI) => {
     try {
-      let { data } = await axiosInstance.get(
+      let { data } = await axios.get(
         `${import.meta.env.VITE_SERVER_DOMAIN}/category`,
       );
       return data;

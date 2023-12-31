@@ -15,7 +15,7 @@ categoryRouter.post('/', verifyToken, async (req, res, next) => {
   }
 });
 
-categoryRouter.get('/', verifyToken, async (req, res, next) => {
+categoryRouter.get('/', async (req, res, next) => {
   try {
     const categories = await Category.find();
     res.json(categories);
