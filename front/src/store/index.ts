@@ -6,12 +6,14 @@ import { useDispatch, useSelector } from "react-redux";
 import type { TypedUseSelectorHook } from "react-redux";
 import userReducer from "./user/userSlice";
 import writeReducer from "./write/writeSlice";
-import categoryReducer from './category/categorySlice'
+import categoryReducer from "./category/categorySlice";
+import tagReducer from "./tag/tagSlice";
 
 const rootReducer = combineReducers({
   user: userReducer,
   write: writeReducer,
   category: categoryReducer,
+  tag: tagReducer,
 });
 
 const persistConfig = {

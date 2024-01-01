@@ -102,7 +102,7 @@ const createOrUpdatePost = async (req, res, next) => {
   }
 };
 
-const getCategory = async (req, res) => {
+const getCategoryPosts = async (req, res) => {
   try {
     const { lastId } = req.query;
     const { categoryState } = req.body;
@@ -145,4 +145,44 @@ const getCategory = async (req, res) => {
   }
 };
 
-module.exports = { createOrUpdatePost, getCategory };
+const getTagPosts = async (req, res, next) => {
+  try {
+    const { lastId } = req.query;
+    const { tagState } = req.body;
+
+    if (tagState.length === 0) {
+      let posts = await Post.find(
+        lastId
+          ? {
+              draft: false,
+              isPublic: true,
+              _id: { $lt: lastId },
+            }
+          : { draft: false, isPublic: true }
+      )
+        .sort({ _id: -1 })
+        .select('title createdAt des tags thumbnail category')
+        .limit(10);
+      return res.send({ posts });
+    } else {
+      let posts = await Post.find(
+        lastId
+          ? {
+              tags: tagState,
+              draft: false,
+              isPublic: true,
+              _id: { $lt: lastId },
+            }
+          : { tags: tagState, draft: false, isPublic: true }
+      )
+        .sort({ _id: -1 })
+        .select('title createdAt des tags thumbnail category')
+        .limit(10);
+      return res.send({ posts });
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = { createOrUpdatePost, getCategoryPosts, getTagPosts };

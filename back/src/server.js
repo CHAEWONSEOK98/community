@@ -15,6 +15,7 @@ const {
   postRouter,
   imageRouter,
   categoryRouter,
+  tagRouter,
 } = require('./routes/');
 
 const server = async () => {
@@ -33,6 +34,7 @@ const server = async () => {
     app.use('/post', postRouter);
     app.use('/image', imageRouter);
     app.use('/category', categoryRouter);
+    app.use('/tag', tagRouter);
 
     app.use((error, req, res, next) => {
       const statusCode = error.statusCode || 500;

@@ -4,6 +4,7 @@ import { MdOutlineLibraryBooks } from "react-icons/md";
 import { AiOutlineComment } from "react-icons/ai";
 import { AiOutlineLike } from "react-icons/ai";
 import { CiSaveDown2 } from "react-icons/ci";
+import { FaTags } from "react-icons/fa";
 import { useAppSelector, useAppDispatch } from "../../store";
 import { logOutUser } from "../../store/user/userThunkFunction";
 import { Link } from "react-router-dom";
@@ -52,6 +53,12 @@ const UserNavigationPanel = () => {
             <li className="flex items-center gap-2">
               <CiSaveDown2 className="text-xl" />
               <p className="text-sm">임시 저장 글</p>
+            </li>
+          </Link>
+          <Link to={`/tags`}>
+            <li className="flex items-center gap-2">
+              <FaTags className="text-xl" />
+              <p className="text-sm">태그</p>
             </li>
           </Link>
         </ul>

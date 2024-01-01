@@ -18,6 +18,7 @@ import WritePage from "./pages/WritePage.tsx";
 import MyPostListPage from "./pages/MyPostListPage.tsx";
 import MyLikePostListPage from "./pages/MyLikePostListPage.tsx";
 import MySavePostPage from "./pages/MySavePostPage.tsx";
+import TagsPage from "./pages/TagsPage.tsx";
 
 const router = createBrowserRouter([
   {
@@ -35,6 +36,10 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <Home />,
+      },
+      {
+        path: "/tags",
+        element: <TagsPage />,
       },
       {
         path: "/post-list",

@@ -8,7 +8,11 @@ const { isValidObjectId, default: mongoose } = require('mongoose');
 const { verifyToken } = require('../middleware/verifyToken');
 
 const { commentRouter } = require('./commentRoute');
-const { createOrUpdatePost, getCategory } = require('../controllers/post');
+const {
+  createOrUpdatePost,
+  getCategoryPosts,
+  getTagPosts,
+} = require('../controllers/post');
 
 // Comment
 // '/post/:postId/comment'
@@ -18,7 +22,10 @@ postRouter.use('/:postId/comment', commentRouter);
 postRouter.post('/', verifyToken, createOrUpdatePost);
 
 // 게시글 카테고리로 분류하여 불러오기
-postRouter.post('/category', getCategory);
+postRouter.post('/category', getCategoryPosts);
+
+// 게시글 태그로 분류하여 불러오기
+postRouter.post('/tag', getTagPosts);
 
 postRouter.get('/:postId', async (req, res) => {
   try {
